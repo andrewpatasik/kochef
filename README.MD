@@ -1,0 +1,1 @@
+Web app boilerplate using Vanilla Javascript, Webpack, Firebase and Tailwind CSS
