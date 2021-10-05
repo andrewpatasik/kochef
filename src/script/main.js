@@ -1,24 +1,13 @@
-import routes from './routes';
+import router from './router';
 
 const main = () => {
   const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
-  const rootElement = document.getElementById('app');
-  if (!userLoginSession.logStatus) {
-    rootElement.appendChild(routes['/login']);
+  const { isLoggedIn } = userLoginSession;
 
-    window.history.pushState(
-      {},
-      '/login',
-      `${window.location.origin}/login`,
-    );
+  if (!isLoggedIn) {
+    router('/login');
   } else {
-    window.history.pushState(
-      {},
-      '/',
-      `${window.location.origin}/`,
-    );
-
-    rootElement.appendChild(routes[window.location.pathname]);
+    router('/');
   }
 };
 

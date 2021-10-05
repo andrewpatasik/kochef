@@ -5,11 +5,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!localStorage.getItem('userLoginSession')) {
       localStorage.setItem('userLoginSession', JSON.stringify({
         name: 'Andrew',
-        logStatus: false,
+        isLoggedIn: false,
       }));
     }
   }
 
   main();
+
   console.log('loaded');
 });

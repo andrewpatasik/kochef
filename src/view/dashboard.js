@@ -1,8 +1,8 @@
 import '../component/NavbarComponent';
 
-class Home extends HTMLElement {
+class Dashboard extends HTMLElement {
   connectedCallback() {
-    console.log('home rendered.');
+    console.log('dashboard rendered.');
     this.classList.add('block');
     this.classList.add('mt-16');
 
@@ -12,9 +12,9 @@ class Home extends HTMLElement {
   render() {
     this.innerHTML = `
       <navbar-component></navbar-component>
-      <h1>Home Page</h1>
+      <h1>Dashboard Page</h1>
     `;
   }
 }
 
-customElements.define('home-element', Home);
+customElements.define('dashboard-element', Dashboard);
