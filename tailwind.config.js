@@ -11,7 +11,7 @@ module.exports = {
     extend: {
       fontFamily: {
         // eslint-disable-next-line quote-props
-        'sans': ['Roboto', 'Arial', 'sans-serif'],
+        'sans': ['Roboto', 'Sans', 'sans-serif'],
       },
     },
   },

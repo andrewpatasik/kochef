@@ -1,42 +1,120 @@
 import '../view/home';
 import '../view/login';
 import '../view/dashboard';
+import '../view/recipeDetails';
+import '../view/404';
 
 const rootElement = document.querySelector('#app');
 
-const routes = {
-  '/': document.createElement('home-element'),
-  '/login': document.createElement('login-element'),
-  '/dashboard': document.createElement('dashboard-element'),
+const routes = [
+  {
+    pathname: '/',
+    param: null,
+    component: document.createElement('home-element'),
+  },
+  {
+    pathname: '/login',
+    param: null,
+    component: document.createElement('login-element'),
+  },
+  {
+    pathname: '/dashboard',
+    param: null,
+    component: document.createElement('dashboard-element'),
+  },
+  {
+    pathname: '/recipe-details',
+    param: null,
+    component: document.createElement('recipe-details'),
+  },
+  {
+    pathname: '/404',
+    param: null,
+    component: document.createElement('not-found'),
+  },
+];
+
+const urlMatcher = (pathname) => {
+  let matches = null;
+
+  let foundMatch = routes.find((route) => {
+    if (route.pathname.slice(1).length === pathname.slice(1).length) {
+      matches = route;
+    }
+
+    return matches;
+  });
+
+  // if nothing match then check for parameterized url
+  if (!foundMatch) {
+    let param = pathname.split('/');
+    matches = routes.find((route) => route.pathname.slice(1).length === param[1].length);
+    param = param.find((index) => index.includes(':'));
+
+    foundMatch = { ...matches, param: param.slice(1) };
+  }
+
+  if (!foundMatch.param) {
+    window.history.pushState(
+      {},
+      pathname,
+      window.location.origin + foundMatch.pathname,
+    );
+  } else {
+    window.history.pushState(
+      {},
+      pathname,
+      `${window.location.origin + foundMatch.pathname}/${foundMatch.param}`,
+    );
+  }
+
+  return foundMatch;
 };
 
-const changeUrlTo = (pathname) => {
-  window.history.pushState(
-    {},
-    pathname,
-    window.location.origin + pathname,
-  );
-};
+const loadPage = (properties) => {
+  const {
+    param,
+    component,
+  } = properties;
 
-const renderPage = (pathname) => {
-  rootElement.append(routes[pathname]);
+  if (param) {
+    component.id = param;
+    rootElement.append(component);
+  } else {
+    rootElement.append(component);
+  }
 };
 
 const router = (pathname) => {
   rootElement.innerHTML = '';
 
   if (pathname === '/logout') {
-    changeUrlTo('/login');
-    renderPage('/login');
+    const pageProperties = urlMatcher('/login');
+    loadPage(pageProperties);
   } else {
-    changeUrlTo(pathname);
-    renderPage(pathname);
+    const pageProperties = urlMatcher(pathname);
+    loadPage(pageProperties);
   }
 
   window.addEventListener('popstate', () => {
     rootElement.innerHTML = '';
 
-    renderPage(window.location.pathname);
+    // how to get param?
+    let pageProperties = routes.find((route) => {
+      if (route.pathname === window.location.pathname) {
+        return route;
+      }
+      return null;
+    });
+
+    if (!pageProperties) {
+      const param = window.location.pathname.split('/');
+      pageProperties = routes.find((route) => route.pathname.slice(1).length === param[1].length);
+
+      pageProperties = { ...pageProperties, param: param[2] };
+    }
+
+    loadPage(pageProperties);
   });
 };
 

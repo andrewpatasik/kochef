@@ -13,7 +13,7 @@ class Login extends HTMLElement {
   render() {
     this.innerHTML = `
       <section class="row-span-auto flex flex-col justify-end items-center">
-        <h1 class="font-sans text-4xl">My App</h1>
+        <h1 class="font-sans text-4xl">Kochef</h1>
       </section>
 
       <section class="row-span-4 flex flex-col justify-center items-center">
@@ -49,7 +49,7 @@ class Login extends HTMLElement {
 
     document.getElementById('login-btn').addEventListener('click', () => {
       const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
-      localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: true }));
+      localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
 
       router('/');
     });

@@ -1,0 +1,52 @@
+[
+      {
+          "category": "Dessert",
+          "url": "https://www.masakapahariini.com/resep-masakan/resep-dessert/",
+          "key": "dessert"
+      },
+      {
+          "category": "Masakan Hari Raya",
+          "url": "https://www.masakapahariini.com/resep-masakan/masakan-hari-raya/",
+          "key": "masakan-hari-raya"
+      },
+      {
+          "category": "Masakan Tradisional",
+          "url": "https://www.masakapahariini.com/resep-masakan/masakan-tradisional/",
+          "key": "masakan-tradisional"
+      },
+      {
+          "category": "Menu Makan Malam",
+          "url": "https://www.masakapahariini.com/resep-masakan/makan-malam/",
+          "key": "makan-malam"
+      },
+      {
+          "category": "Menu Makan Siang",
+          "url": "https://www.masakapahariini.com/resep-masakan/makan-siang/",
+          "key": "makan-siang"
+      },
+      {
+          "category": "Resep Ayam",
+          "url": "https://www.masakapahariini.com/resep-masakan/resep-ayam/",
+          "key": "resep-ayam"
+      },
+      {
+          "category": "Resep Daging",
+          "url": "https://www.masakapahariini.com/resep-masakan/resep-daging/",
+          "key": "resep-daging"
+      },
+      {
+          "category": "Resep Sayuran",
+          "url": "https://www.masakapahariini.com/resep-masakan/resep-sayuran/",
+          "key": "resep-sayuran"
+      },
+      {
+          "category": "Resep Seafood",
+          "url": "https://www.masakapahariini.com/resep-masakan/resep-seafood/",
+          "key": "resep-seafood"
+      },
+      {
+          "category": "Sarapan",
+          "url": "https://www.masakapahariini.com/resep-masakan/sarapan/",
+          "key": "sarapan"
+      }
+]

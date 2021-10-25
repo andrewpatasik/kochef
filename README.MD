@@ -1,1 +1,2 @@
-Web app boilerplate using Vanilla Javascript, Webpack, Firebase and Tailwind CSS
+## what is Kochef?
+Kochef — a kitchen companion app, all-in-one resources to help you start your culinary business.
