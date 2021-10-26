@@ -7,6 +7,12 @@ import fetchRecipes from '../data/fetchRecipes';
 import recipeData from '../data/RecipeData';
 
 class SelectedRecipeComponent extends HTMLElement {
+  constructor() {
+    super();
+
+    this.populateContent = this.populateContent.bind(this);
+  }
+
   connectedCallback() {
     this.classList.add('w-full');
     this.classList.add('h-60');
@@ -16,6 +22,31 @@ class SelectedRecipeComponent extends HTMLElement {
 
     this.render();
 
+    this.initObserver(this.populateContent);
+  }
+
+  initObserver(exec) {
+    let options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.25,
+    }
+
+    let callback = (entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          exec();
+        }
+      })
+    }
+
+    let observer = new IntersectionObserver(callback, options);
+
+    let target = this;
+    observer.observe(target);
+  }
+
+  populateContent() {
     if (window.localStorage) {
       const cached = JSON.parse(localStorage.getItem('userRecipeData')).selected;
       if (cached && cached.length) {
