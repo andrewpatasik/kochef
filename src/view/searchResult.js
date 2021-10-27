@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import '../component/NavbarComponent';
 import '../component/RecipeCardComponent';
 import '../component/LoadingIndicatorComponent';
-// import fetchRecipes from '../data/fetchRecipes';
+import fetchRecipes from '../data/fetchRecipes';
 import searchResult from '../data/searchResultData';
-import fakeSearchResultData from '../data/fakeSearchResultData.json';
+// import fakeSearchResultData from '../data/fakeSearchResultData.json';
 
 class SearchResult extends HTMLElement {
   constructor() {
@@ -17,47 +18,78 @@ class SearchResult extends HTMLElement {
   }
 
   searchPagination(page) {
-    while (!this.endOfPage) {
-      const limit = 10;
-      const accumulator = [];
+    const limit = 10;
+    const accumulator = [];
 
-      const endIndex = page * limit;
-      const nextIndex = endIndex;
-      const lastIndex = this.searchResultsData.length;
+    const endIndex = page * limit;
+    const nextIndex = endIndex + 1;
 
-      let currentIndex = this.startIndex;
+    let currentIndex = this.startIndex;
+    const dataLen = this.searchResultsData.length;
 
-      for (currentIndex; currentIndex < endIndex; currentIndex += 1) {
-        accumulator.push(this.searchResultsData[currentIndex]);
-        if (currentIndex === lastIndex) {
-          this.endOfPage = true;
-          return;
-        }
-      }
-
-      searchResult.setState(accumulator)
-        .then((data) => {
-          this.data = data;
-          this.startIndex = nextIndex;
-          this.page += 1;
-
-          this.render();
-        });
-
-      return;
+    if (this.endOfPage) {
+      return accumulator;
     }
 
-    console.log('no data');
+    for (currentIndex; currentIndex <= endIndex; currentIndex += 1) {
+      accumulator.push(this.searchResultsData[currentIndex]);
+      if (currentIndex === dataLen) {
+        this.endOfPage = true;
+
+        accumulator.pop();
+        return accumulator;
+      }
+    }
+
+    this.startIndex = nextIndex;
+    this.page += 1;
+
+    return accumulator;
   }
 
-  // initObserver() {
+  initObserver() {
+    const target = this.lastChild;
 
-  // }
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0,
+    };
+
+    const callback = (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const recipeData = this.searchPagination(this.page);
+
+          if (recipeData.length > 0) {
+            console.log(recipeData);
+            let newRecipeData = searchResult.getData();
+            newRecipeData = newRecipeData.concat(recipeData);
+            searchResult.setState(newRecipeData)
+              .then((data) => {
+                this.data = data;
+                this.render();
+                this.initObserver();
+              });
+          } else {
+            observer.unobserve(target);
+            this.removeChild(this.lastChild);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    observer.observe(target);
+  }
 
   disconnectedCallback() {
     this.startIndex = 0;
     this.page = 1;
     this.endOfPage = false;
+    this.searchResultsData = [];
+    this.data = null;
   }
 
   connectedCallback() {
@@ -67,26 +99,30 @@ class SearchResult extends HTMLElement {
     this.classList.add('mt-16');
 
     this.render();
-    // const queryString = window.location.search;
-    // const urlParam = new URLSearchParams(queryString);
-    // const searchParam = urlParam.get('q');
 
-    // fetchRecipes(`/api/search/?q=${searchParam}`)
-    //   .then((results) => {
-    //     // store fetched data to DS
-    //     this.searchResultsData = [...results];
+    // get urlParam
+    const queryString = window.location.search;
+    const queryParam = new URLSearchParams(queryString);
+    const param = queryParam.get('q');
 
-    //     // implement pagination to display 10 recipes/page
-    //     this.searchPagination(this.page);
-    //   });
-
-    this.searchResultsData = [...fakeSearchResultData];
-    this.searchPagination(this.page);
+    // initial fetched
+    // this.searchResultsData = [...fakeSearchResultData];
+    fetchRecipes(`/api/search/?q=${param}`)
+      .then((results) => {
+        this.searchResultsData = [...results];
+        console.log(this.searchResultsData);
+        const recipeData = this.searchPagination(this.page);
+        searchResult.setState(recipeData)
+          .then((data) => {
+            this.data = data;
+            this.render();
+          }).then(() => {
+            this.initObserver();
+          });
+      });
   }
 
   render() {
-    this.innerHTML = '';
-
     if (this.data) {
       this.innerHTML = `
         <navbar-component></navbar-component>
@@ -108,12 +144,7 @@ class SearchResult extends HTMLElement {
       });
 
       const loadingIndicator = document.createElement('loading-indicator');
-
       this.appendChild(loadingIndicator);
-
-      loadingIndicator.addEventListener('click', () => {
-        this.searchPagination(this.page);
-      });
     } else {
       this.innerHTML = `
           <navbar-component></navbar-component>

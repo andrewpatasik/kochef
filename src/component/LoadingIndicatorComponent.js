@@ -3,9 +3,9 @@ class LoadingIndicatorComponent extends HTMLElement {
     this.classList.add('flex');
     this.classList.add('items-center');
     this.classList.add('justify-center');
-    this.classList.add('m-4');
-    this.classList.add('w-auto');
-    this.classList.add('h-auto');
+    this.classList.add('p-4');
+    this.classList.add('w-full');
+    this.classList.add('h-14');
 
     this.render();
   }

@@ -10,7 +10,7 @@ const searchResultsData = () => {
         newState.push(data);
       });
 
-      searchResultState = searchResultState.concat(newState);
+      searchResultState = newState;
 
       return getData();
     } catch (error) {

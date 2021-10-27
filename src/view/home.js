@@ -15,6 +15,7 @@ class Home extends HTMLElement {
 
     this.currentPage = 1;
 
+    window.addEventListener = window.addEventListener.bind(window);
     this.populateNextPage = this.populateNextPage.bind(this);
 
     if (window.localStorage) {
