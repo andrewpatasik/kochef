@@ -15,7 +15,7 @@ class Home extends HTMLElement {
 
     this.currentPage = 1;
 
-    this.callback = this.callback.bind(this);
+    this.populateNextPage = this.populateNextPage.bind(this);
 
     if (window.localStorage) {
       if (!localStorage.getItem('userRecipeData')) {
@@ -27,7 +27,7 @@ class Home extends HTMLElement {
     }
   }
 
-  callback() {
+  populateNextPage() {
     const {
       scrollTop,
       scrollHeight,
@@ -35,7 +35,7 @@ class Home extends HTMLElement {
     } = document.documentElement;
 
     if ((scrollTop + clientHeight) >= scrollHeight - 1) {
-      window.removeEventListener('scroll', this.callback, {
+      window.removeEventListener('scroll', this.populateNextPage, {
         passive: true,
       });
 
@@ -53,7 +53,7 @@ class Home extends HTMLElement {
       //           .recipeCardData = recipeData.getData()
       //             .allRecipeDataState;
 
-      //         window.addEventListener('scroll', this.callback, {
+      //         window.addEventListener('scroll', this.populateNextPage, {
       //           passive: true,
       //         });
       //       });
@@ -71,7 +71,7 @@ class Home extends HTMLElement {
               .recipeCardData = recipeData.getData()
                 .allRecipeDataState;
 
-            window.addEventListener('scroll', this.callback, {
+            window.addEventListener('scroll', this.populateNextPage, {
               passive: true,
             });
           });
@@ -82,7 +82,7 @@ class Home extends HTMLElement {
   disconnectedCallback() {
     this.currentPage = 1;
 
-    window.removeEventListener('scroll', this.callback, {
+    window.removeEventListener('scroll', this.populateNextPage, {
       passive: true,
     });
   }
@@ -108,7 +108,7 @@ class Home extends HTMLElement {
     //             .allRecipeDataState;
     //       })
     //       .then(() => {
-    //         window.addEventListener('scroll', this.callback, {
+    //         window.addEventListener('scroll', this.populateNextPage, {
     //           passive: true,
     //         });
     //       });
@@ -127,7 +127,7 @@ class Home extends HTMLElement {
       })
       .then(() => {
         setTimeout(() => {
-          window.addEventListener('scroll', this.callback, {
+          window.addEventListener('scroll', this.populateNextPage, {
             passive: true,
           });
         }, 3000);

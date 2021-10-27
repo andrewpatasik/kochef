@@ -1,6 +1,3 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-underscore-dangle */
 import './RecipeCardComponent';
 import cacheRecipeData from '../data/cachedRecipeData';
 import fetchRecipes from '../data/fetchRecipes';
@@ -26,23 +23,25 @@ class SelectedRecipeComponent extends HTMLElement {
   }
 
   initObserver(exec) {
-    let options = {
+    const target = this;
+
+    const options = {
       root: null,
       rootMargin: '0px',
       threshold: 0.25,
-    }
+    };
 
-    let callback = (entries, observer) => {
-      entries.forEach(entry => {
+    const callback = (entries, observer) => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           exec();
+          observer.unobserve(target);
         }
-      })
-    }
+      });
+    };
 
-    let observer = new IntersectionObserver(callback, options);
+    const observer = new IntersectionObserver(callback, options);
 
-    let target = this;
     observer.observe(target);
   }
 
@@ -87,7 +86,7 @@ class SelectedRecipeComponent extends HTMLElement {
         this.appendChild(recipeCardElement);
       });
     } else {
-      for (let index = 0; index < 3; index++) {
+      for (let index = 0; index < 3; index += 1) {
         const recipeCardElement = document.createElement('recipe-card');
 
         recipeCardElement.setAttribute('img-border', 'rounded-md');

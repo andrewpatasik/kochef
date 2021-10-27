@@ -3,7 +3,6 @@ import router from '../script/router';
 
 class NavbarComponent extends HTMLElement {
   connectedCallback() {
-    // console.log('navbar rendered.');
     this.classList.add('flex');
     this.classList.add('fixed');
     this.classList.add('z-10');
@@ -42,7 +41,7 @@ class NavbarComponent extends HTMLElement {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
             </svg> 
-            <span>Home</span>
+            <span>Beranda</span>
         </div>
       </a>
 
@@ -51,7 +50,7 @@ class NavbarComponent extends HTMLElement {
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
             </svg>
-            <span>My Dashboard</span> 
+            <span>Profil</span> 
         </div>
       </a>
 

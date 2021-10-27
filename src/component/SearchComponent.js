@@ -1,9 +1,7 @@
-class SearchComponent extends HTMLElement {
-  constructor() {
-    super();
-    this.render();
-  }
+// eslint-disable-next-line import/no-cycle
+import router from '../script/router';
 
+class SearchComponent extends HTMLElement {
   connectedCallback() {
     this.classList.add('flex');
     this.classList.add('items-center');
@@ -14,6 +12,13 @@ class SearchComponent extends HTMLElement {
     this.classList.add('rounded-lg');
     this.classList.add('shadow-lg');
     this.classList.add('bg-white');
+
+    this.render();
+
+    this.querySelector('input').addEventListener('change', () => {
+      const inputVal = this.querySelector('input').value;
+      router(`/search/:${inputVal}`);
+    });
   }
 
   render() {

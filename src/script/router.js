@@ -2,6 +2,7 @@ import '../view/home';
 import '../view/login';
 import '../view/dashboard';
 import '../view/recipeDetails';
+import '../view/searchResult';
 import '../view/404';
 
 const rootElement = document.querySelector('#app');
@@ -26,6 +27,11 @@ const routes = [
     pathname: '/recipe-details',
     param: null,
     component: document.createElement('recipe-details'),
+  },
+  {
+    pathname: '/search',
+    param: null,
+    component: document.createElement('search-result'),
   },
   {
     pathname: '/404',
@@ -54,6 +60,16 @@ const urlMatcher = (pathname) => {
     foundMatch = { ...matches, param: param.slice(1) };
   }
 
+  if (foundMatch.pathname === '/search') {
+    window.history.pushState(
+      {},
+      pathname,
+      `${window.location.origin + foundMatch.pathname}?q=${foundMatch.param}`,
+    );
+
+    return foundMatch;
+  }
+
   if (!foundMatch.param) {
     window.history.pushState(
       {},
@@ -71,13 +87,14 @@ const urlMatcher = (pathname) => {
   return foundMatch;
 };
 
-const loadPage = (properties) => {
+const loadPage = (prop) => {
   const {
+    pathname,
     param,
     component,
-  } = properties;
+  } = prop;
 
-  if (param) {
+  if (pathname === '/recipe-details') {
     component.id = param;
     rootElement.append(component);
   } else {
