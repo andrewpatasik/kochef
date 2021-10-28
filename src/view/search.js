@@ -65,8 +65,8 @@ class Search extends HTMLElement {
                 this.data = data;
                 setTimeout(() => {
                   this.render();
-                  const nextDataObserver = this.initObserver();
-                  nextDataObserver.startObserve();
+                  const paginationObserver = this.initObserver();
+                  paginationObserver.startObserve();
                 }, 1500);
               });
           } else {
@@ -96,8 +96,8 @@ class Search extends HTMLElement {
     this.endOfPage = false;
     this.searchResultsData = [];
     this.data = null;
-    const nextDataObserver = this.initObserver();
-    nextDataObserver.startObserve();
+    const paginationObserver = this.initObserver();
+    paginationObserver.stopObserve();
   }
 
   connectedCallback() {
@@ -121,9 +121,9 @@ class Search extends HTMLElement {
           .then((data) => {
             this.data = data;
             this.render();
-          }).then(() => {
-            const nextDataObserver = this.initObserver();
-            nextDataObserver.startObserve();
+
+            const paginationObserver = this.initObserver();
+            paginationObserver.startObserve();
           });
       });
   }

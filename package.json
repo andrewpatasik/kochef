@@ -4,6 +4,7 @@
   "description": "Kochef — a kitchen companion app, all-in-one resources to help you start your culinary business.",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "start": "webpack serve --open --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "build-css": "npx tailwindcss -i src/styles/style.css -o dist/style.css",
@@ -15,6 +16,7 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.8",
     "critical": "^4.0.1",
     "css-loader": "^6.4.0",
     "eslint": "^7.32.0",
