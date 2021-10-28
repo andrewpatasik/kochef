@@ -1,8 +1,8 @@
 import '../view/home';
 import '../view/login';
 import '../view/dashboard';
+import '../view/search';
 import '../view/recipeDetails';
-import '../view/searchResult';
 import '../view/404';
 
 const rootElement = document.querySelector('#app');

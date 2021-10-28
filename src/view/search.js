@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable class-methods-use-this */
 import '../component/NavbarComponent';
 import '../component/RecipeCardComponent';
 import '../component/LoadingIndicatorComponent';
@@ -7,7 +5,7 @@ import fetchRecipes from '../data/fetchRecipes';
 import searchResult from '../data/searchResultData';
 // import fakeSearchResultData from '../data/fakeSearchResultData.json';
 
-class SearchResult extends HTMLElement {
+class Search extends HTMLElement {
   constructor() {
     super();
 
@@ -17,14 +15,12 @@ class SearchResult extends HTMLElement {
     this.searchResultsData = [];
   }
 
-  searchPagination(page) {
+  getSearchResult(page) {
+    let currentIndex = this.startIndex;
     const limit = 10;
-    const accumulator = [];
-
     const endIndex = page * limit;
     const nextIndex = endIndex + 1;
-
-    let currentIndex = this.startIndex;
+    const accumulator = [];
     const dataLen = this.searchResultsData.length;
 
     if (this.endOfPage) {
@@ -32,13 +28,11 @@ class SearchResult extends HTMLElement {
     }
 
     for (currentIndex; currentIndex <= endIndex; currentIndex += 1) {
-      accumulator.push(this.searchResultsData[currentIndex]);
       if (currentIndex === dataLen) {
         this.endOfPage = true;
-
-        accumulator.pop();
         return accumulator;
       }
+      accumulator.push(this.searchResultsData[currentIndex]);
     }
 
     this.startIndex = nextIndex;
@@ -48,6 +42,7 @@ class SearchResult extends HTMLElement {
   }
 
   initObserver() {
+    // last child is loading indicator
     const target = this.lastChild;
 
     const options = {
@@ -56,32 +51,43 @@ class SearchResult extends HTMLElement {
       threshold: 1.0,
     };
 
-    const callback = (entries, observer) => {
+    const handlePaginationEvent = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const recipeData = this.searchPagination(this.page);
+          const recipeData = this.getSearchResult(this.page);
 
-          if (recipeData.length > 0) {
-            console.log(recipeData);
+          if (recipeData && recipeData.length > 0) {
             let newRecipeData = searchResult.getData();
             newRecipeData = newRecipeData.concat(recipeData);
+
             searchResult.setState(newRecipeData)
               .then((data) => {
                 this.data = data;
-                this.render();
-                this.initObserver();
+                setTimeout(() => {
+                  this.render();
+                  const nextDataObserver = this.initObserver();
+                  nextDataObserver.startObserve();
+                }, 1500);
               });
           } else {
             observer.unobserve(target);
+            // remove loading indicator
             this.removeChild(this.lastChild);
           }
         }
       });
     };
+    const observer = new IntersectionObserver(handlePaginationEvent, options);
 
-    const observer = new IntersectionObserver(callback, options);
+    const startObserve = () => {
+      observer.observe(target);
+    };
 
-    observer.observe(target);
+    const stopObserve = () => {
+      observer.unobserve(target);
+    };
+
+    return { startObserve, stopObserve };
   }
 
   disconnectedCallback() {
@@ -90,6 +96,8 @@ class SearchResult extends HTMLElement {
     this.endOfPage = false;
     this.searchResultsData = [];
     this.data = null;
+    const nextDataObserver = this.initObserver();
+    nextDataObserver.startObserve();
   }
 
   connectedCallback() {
@@ -100,24 +108,22 @@ class SearchResult extends HTMLElement {
 
     this.render();
 
-    // get urlParam
     const queryString = window.location.search;
     const queryParam = new URLSearchParams(queryString);
     const param = queryParam.get('q');
 
-    // initial fetched
     // this.searchResultsData = [...fakeSearchResultData];
     fetchRecipes(`/api/search/?q=${param}`)
       .then((results) => {
         this.searchResultsData = [...results];
-        console.log(this.searchResultsData);
-        const recipeData = this.searchPagination(this.page);
+        const recipeData = this.getSearchResult(this.page);
         searchResult.setState(recipeData)
           .then((data) => {
             this.data = data;
             this.render();
           }).then(() => {
-            this.initObserver();
+            const nextDataObserver = this.initObserver();
+            nextDataObserver.startObserve();
           });
       });
   }
@@ -165,4 +171,4 @@ class SearchResult extends HTMLElement {
   }
 }
 
-customElements.define('search-result', SearchResult);
+customElements.define('search-result', Search);
