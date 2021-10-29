@@ -1,27 +1,38 @@
 /* eslint-disable no-undef */
-import initState from '../data/initState';
+import useState from '../data/useState';
 
-test('stateOne returns zero', () => {
-  const stateOne = initState(0);
-  expect(stateOne.getState()).toEqual(0);
+describe('useState', () => {
+  test('useState returns an array of two value', () => {
+    const myState = useState(1);
+    expect(myState.length).toEqual(2);
+  });
+
+  test('setter change value from 1 to 3', () => {
+    const [myState, mySetter] = useState(1);
+    mySetter(3);
+    expect(myState()).toEqual(3);
+  });
+
+  test('useState takes object and return object', () => {
+    const [myState, mySetter] = useState({ city: 'pinrang' });
+    expect(myState()).toEqual({ city: 'pinrang' });
+
+    mySetter({ city: 'jakarta' });
+    expect(myState().city).toEqual('jakarta');
+  });
+
+  test('useState takes array and return concated array', () => {
+    const [myState, mySetter] = useState([1, 2, 3]);
+    mySetter([...myState(), 4, 5]);
+    expect(myState()).toEqual([1, 2, 3, 4, 5]);
+
+    const [myState2, mySetter2] = useState([1, 2, 3]);
+    mySetter2(myState2().concat([4, 5]));
+    expect(myState2()).toEqual([1, 2, 3, 4, 5]);
+  });
 });
 
-test('stateOne change value to 1', () => {
-  const state = initState(0);
-  state.setState(1);
-  expect(state.getState()).toEqual(1);
-});
-
-test('stateOne value equals to [1, 2, 3]', () => {
-  const array = [1, 2, 3];
-  const state = initState(0);
-  state.setState([...array]);
-  expect(state.getState()).toEqual([1, 2, 3]);
-});
-
-test('stateOne value equals to [1, 2, 3, 4, 5] after concat', () => {
-  const array = [4, 5];
-  const state = initState([1, 2, 3]);
-  state.setState([...state.getState().concat(array)]);
-  expect(state.getState()).toEqual([1, 2, 3, 4, 5]);
-});
+// should be instantiated
+// should takes one parameter as initial state
+// should returns state value and a method to set the state
+// should be modular
