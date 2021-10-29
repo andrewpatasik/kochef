@@ -2,7 +2,7 @@ import '../component/NavbarComponent';
 import '../component/RecipeCardComponent';
 import '../component/LoadingIndicatorComponent';
 import fetchRecipes from '../data/fetchRecipes';
-import searchResult from '../data/searchResultData';
+import useState from '../data/useState';
 // import fakeSearchResultData from '../data/fakeSearchResultData.json';
 
 class Search extends HTMLElement {
@@ -13,6 +13,7 @@ class Search extends HTMLElement {
     this.startIndex = 0;
     this.endOfPage = false;
     this.searchResultsData = [];
+    this.lastSearchResultData = [];
   }
 
   getSearchResult(page) {
@@ -57,12 +58,8 @@ class Search extends HTMLElement {
           const recipeData = this.getSearchResult(this.page);
 
           if (recipeData && recipeData.length > 0) {
-            let newRecipeData = searchResult.getData();
-            newRecipeData = newRecipeData.concat(recipeData);
-
-            searchResult.setState(newRecipeData)
-              .then((data) => {
-                this.data = data;
+            this.populateData(recipeData)
+              .then(() => {
                 setTimeout(() => {
                   this.render();
                   const paginationObserver = this.initObserver();
@@ -90,11 +87,25 @@ class Search extends HTMLElement {
     return { startObserve, stopObserve };
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  async populateData(recipeData) {
+    const [getSearchResultState, setSearchResultState] = useState([]);
+
+    let newRecipeData = this.lastSearchResultData;
+    newRecipeData = newRecipeData.concat(recipeData);
+
+    await setSearchResultState([...newRecipeData]);
+    const searchResultState = getSearchResultState();
+    this.data = searchResultState;
+    this.lastSearchResultData = [...searchResultState];
+  }
+
   disconnectedCallback() {
     this.startIndex = 0;
     this.page = 1;
     this.endOfPage = false;
     this.searchResultsData = [];
+    this.lastSearchResultData = [];
     this.data = null;
     const paginationObserver = this.initObserver();
     paginationObserver.stopObserve();
@@ -117,11 +128,10 @@ class Search extends HTMLElement {
       .then((results) => {
         this.searchResultsData = [...results];
         const recipeData = this.getSearchResult(this.page);
-        searchResult.setState(recipeData)
-          .then((data) => {
-            this.data = data;
-            this.render();
 
+        this.populateData(recipeData)
+          .then(() => {
+            this.render();
             const paginationObserver = this.initObserver();
             paginationObserver.startObserve();
           });

@@ -1,7 +1,7 @@
 import './RecipeCardComponent';
 import cacheRecipeData from '../data/cachedRecipeData';
 import fetchRecipes from '../data/fetchRecipes';
-import recipeData from '../data/RecipeData';
+import useState from '../data/useState';
 
 class SelectedRecipeComponent extends HTMLElement {
   constructor() {
@@ -46,25 +46,26 @@ class SelectedRecipeComponent extends HTMLElement {
   }
 
   populateContent() {
-    if (window.localStorage) {
-      const cached = JSON.parse(localStorage.getItem('userRecipeData')).selected;
-      if (cached && cached.length) {
-        const cachedSelected = JSON.parse(localStorage.getItem('userRecipeData')).selected;
+    const [getSelectedRecipeState, setSelectedRecipeState] = useState();
 
-        recipeData.setState('selected', cachedSelected)
-          .then((data) => {
-            this.data = data;
-            this.render();
-          });
+    if (window.localStorage) {
+      const cachedSelected = JSON.parse(localStorage.getItem('userRecipeData')).selected;
+      if (cachedSelected && cachedSelected.length) {
+        setSelectedRecipeState([...cachedSelected]);
+        const selectedRecipeState = getSelectedRecipeState();
+
+        this.data = selectedRecipeState;
+        this.render();
       } else {
         fetchRecipes('/api/categorys/recipes/masakan-hari-raya')
           .then((results) => {
-            recipeData.setState('selected', results)
-              .then((data) => {
-                this.data = data;
-                this.render();
-                cacheRecipeData('selected', data);
-              });
+            setSelectedRecipeState([...results]);
+            const selectedRecipeState = getSelectedRecipeState();
+
+            this.data = selectedRecipeState;
+            this.render();
+
+            cacheRecipeData('selected', selectedRecipeState);
           });
       }
     }

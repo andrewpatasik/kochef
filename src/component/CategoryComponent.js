@@ -1,9 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import fakeCategory from '../data/fakeCategory.json';
-import recipeCategory from '../data/RecipeCategory';
+import useState from '../data/useState';
 
 class CategoryComponent extends HTMLElement {
   connectedCallback() {
+    const [getCategoryState, setCategoryState] = useState();
+
     this.classList.add('w-full');
     this.classList.add('h-20');
     this.classList.add('flex');
@@ -12,12 +14,9 @@ class CategoryComponent extends HTMLElement {
     this.classList.add('mt-2');
     this.classList.add('mb-4');
 
-    recipeCategory.setState(fakeCategory)
-      .then((categoryData) => {
-        this.categoryData = categoryData;
-
-        this.render();
-      });
+    setCategoryState(fakeCategory);
+    this.categoryData = getCategoryState();
+    this.render();
   }
 
   render() {

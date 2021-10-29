@@ -4,11 +4,12 @@
 import router from '../script/router';
 import cacheRecipeData from '../data/cachedRecipeData';
 import fetchRecipes from '../data/fetchRecipes';
-import recipeData from '../data/RecipeData';
+import useState from '../data/useState';
 import './RecipeCardComponent';
 
 class TodayRecipeComponent extends HTMLElement {
   connectedCallback() {
+    const [getTodayRecipeState, setTodayRecipeState] = useState();
     this.classList.add('flex');
     this.classList.add('bg-green-800');
     this.classList.add('items-center');
@@ -19,29 +20,28 @@ class TodayRecipeComponent extends HTMLElement {
     this.render();
 
     if (window.localStorage) {
-      const cached = JSON.parse(localStorage.getItem('userRecipeData')).today;
+      const cachedToday = JSON.parse(localStorage.getItem('userRecipeData')).today;
 
-      if (cached && Object.keys(cached).length) {
-        const cachedToday = JSON.parse(localStorage.getItem('userRecipeData')).today;
+      if (cachedToday && Object.keys(cachedToday).length) {
+        setTodayRecipeState({ ...cachedToday });
+        const todayRecipeState = getTodayRecipeState();
 
-        recipeData.setState('today', cachedToday)
-          .then((data) => {
-            document.querySelector('recipe-card').cardDetail = { ...data[0] };
-            this.querySelector('button').addEventListener('click', () => {
-              router(`/recipe-details/:${data[0].key}`);
-            });
-          });
+        document.querySelector('recipe-card').cardDetail = { ...todayRecipeState };
+        this.querySelector('button').addEventListener('click', () => {
+          router(`/recipe-details/:${todayRecipeState.key}`);
+        });
       } else {
         fetchRecipes('/api/recipes-length/?limit=1')
           .then((results) => {
-            recipeData.setState('today', results)
-              .then((data) => {
-                document.querySelector('recipe-card').cardDetail = { ...data[0] };
-                cacheRecipeData('today', data);
-                this.querySelector('button').addEventListener('click', () => {
-                  router(`/recipe-details/:${data[0].key}`);
-                });
-              });
+            setTodayRecipeState({ ...results[0] });
+            const todayRecipeState = getTodayRecipeState();
+
+            document.querySelector('recipe-card').cardDetail = { ...todayRecipeState };
+            this.querySelector('button').addEventListener('click', () => {
+              router(`/recipe-details/:${todayRecipeState.key}`);
+            });
+
+            cacheRecipeData('today', todayRecipeState);
           });
       }
     }

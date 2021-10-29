@@ -3,7 +3,7 @@
 import '../component/RecipeCardComponent';
 import '../component/SliderComponent';
 import fakeDetailsData from '../data/fakeDetailsData.json';
-import recipeDetailsData from '../data/RecipeDetailsData';
+import useState from '../data/useState';
 import '../component/NavbarComponent';
 import fetchRecipes from '../data/fetchRecipes';
 
@@ -13,6 +13,8 @@ class RecipeDetails extends HTMLElement {
   }
 
   connectedCallback() {
+    const [getRecipeDetailState, setRecipeDetailState] = useState();
+
     this.classList.add('flex');
     this.classList.add('flex-col');
     this.classList.add('pt-16');
@@ -21,15 +23,12 @@ class RecipeDetails extends HTMLElement {
 
     this.render();
 
-    // fetch data based on recipeId
     fetchRecipes(`/api/recipe/:${this.getAttribute('id')}`)
       .then((result) => {
-        recipeDetailsData.setState([result])
-          .then((data) => {
-            this.details = data;
-            // this.details = data.find((details) => details.key === this.getAttribute('id'));
-            this.render();
-          });
+        setRecipeDetailState({ ...result });
+        const recipeDetailState = getRecipeDetailState();
+        this.details = recipeDetailState;
+        this.render();
       });
   }
 

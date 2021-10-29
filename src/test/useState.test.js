@@ -14,11 +14,12 @@ describe('useState', () => {
   });
 
   test('useState takes object and return object', () => {
-    const [myState, mySetter] = useState({ city: 'pinrang' });
-    expect(myState()).toEqual({ city: 'pinrang' });
+    const [myState, mySetter] = useState();
 
-    mySetter({ city: 'jakarta' });
-    expect(myState().city).toEqual('jakarta');
+    mySetter({ name: 'chelsea', city: 'jakarta' });
+    const myNewState = myState();
+    mySetter({ ...myNewState, country: 'indonesia' });
+    expect(myState()).toEqual({ name: 'chelsea', city: 'jakarta', country: 'indonesia' });
   });
 
   test('useState takes array and return concated array', () => {
