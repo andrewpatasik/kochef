@@ -6,6 +6,7 @@ import fakeDetailsData from '../data/fakeDetailsData.json';
 import useState from '../data/useState';
 import '../component/NavbarComponent';
 import fetchRecipes from '../data/fetchRecipes';
+import saveRecipe from '../data/saveRecipe';
 
 class RecipeDetails extends HTMLElement {
   disconnectedCallback() {
@@ -13,7 +14,15 @@ class RecipeDetails extends HTMLElement {
   }
 
   connectedCallback() {
-    this.isSaved = false;
+    if (window.localStorage) {
+      if (!window.localStorage.getItem('savedRecipe')) {
+        this.isSaved = false;
+        return;
+      }
+      const recipeFromStorage = JSON.parse(window.localStorage.getItem('savedRecipe'));
+      const recipeKey = this.getAttribute('id');
+      this.isSaved = recipeFromStorage.some((recipe) => recipe.key === recipeKey);
+    }
     const [getRecipeDetailState, setRecipeDetailState] = useState();
 
     this.classList.add('flex');
@@ -44,6 +53,9 @@ class RecipeDetails extends HTMLElement {
               icon.classList.remove('animate-ping');
             }, 700);
           }
+          saveRecipe({ ...this.details, key: this.getAttribute('id') }, {
+            caches: true,
+          });
         });
       });
   }
