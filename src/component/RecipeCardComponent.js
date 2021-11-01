@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
 // eslint-disable-next-line import/no-cycle
 import router from '../script/router';
@@ -73,7 +70,7 @@ class RecipeCardComponent extends HTMLElement {
               </svg>
               <p>${dificulty}</p>
             </li>
-          </ul>
+          </ul>       
       </section>
       `;
 
