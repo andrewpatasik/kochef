@@ -17,11 +17,11 @@ class RecipeDetails extends HTMLElement {
     if (window.localStorage) {
       if (!window.localStorage.getItem('savedRecipe')) {
         this.isSaved = false;
-        return;
+      } else {
+        const recipeFromStorage = JSON.parse(window.localStorage.getItem('savedRecipe'));
+        const recipeKey = this.getAttribute('id');
+        this.isSaved = recipeFromStorage.some((recipe) => recipe.key === recipeKey);
       }
-      const recipeFromStorage = JSON.parse(window.localStorage.getItem('savedRecipe'));
-      const recipeKey = this.getAttribute('id');
-      this.isSaved = recipeFromStorage.some((recipe) => recipe.key === recipeKey);
     }
     const [getRecipeDetailState, setRecipeDetailState] = useState();
 
