@@ -121,7 +121,7 @@ class Home extends HTMLElement {
     recipeData.setState('all', fakeData)
       .then(() => {
         setTimeout(() => {
-          document.querySelector('all-recipe')
+          this.querySelector('all-recipe')
             .recipeCardData = recipeData.getData()
               .allRecipeDataState;
         }, 1500);

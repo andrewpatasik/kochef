@@ -9,11 +9,12 @@ import fetchRecipes from '../data/fetchRecipes';
 import saveRecipe from '../data/saveRecipe';
 
 class RecipeDetails extends HTMLElement {
-  disconnectedCallback() {
+  disconnectedCallback() { 
     this.details = null;
   }
 
   connectedCallback() {
+    console.log('details');
     if (window.localStorage) {
       if (!window.localStorage.getItem('savedRecipe')) {
         this.isSaved = false;
