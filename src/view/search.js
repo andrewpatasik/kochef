@@ -139,12 +139,15 @@ class Search extends HTMLElement {
   }
 
   render() {
-    if (this.data) {
-      this.innerHTML = `
+    this.innerHTML = `
         <navbar-component></navbar-component>
-        <h1>Search Result</h1>
+        <div class="p-2 text-green-800">
+          <h1>Search Result</h1>
+          <span>${this.data ? `${this.searchResultsData.length} resep ditemukan` : 'mencari resep, tunggu...'} </span>
+        </div>
       `;
 
+    if (this.data) {
       this.data.forEach((data) => {
         const recipeCardElement = document.createElement('recipe-card');
         recipeCardElement.cardDetail = data;
@@ -162,11 +165,6 @@ class Search extends HTMLElement {
       const loadingIndicator = document.createElement('loading-indicator');
       this.appendChild(loadingIndicator);
     } else {
-      this.innerHTML = `
-          <navbar-component></navbar-component>
-          <h1>Search Result</h1>
-        `;
-
       for (let index = 0; index < 3; index += 1) {
         const recipeCardElement = document.createElement('recipe-card');
 

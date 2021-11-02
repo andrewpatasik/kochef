@@ -139,7 +139,7 @@ class Home extends HTMLElement {
     this.innerHTML = '';
 
     this.innerHTML = `
-      <navbar-component></navbar-component>
+      <navbar-component home="${true}"></navbar-component>
       <div class="w-full h-20 flex items-center">
         <searchbar-component></searchbar-component>
       </div>

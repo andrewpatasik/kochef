@@ -1,7 +1,8 @@
+/* eslint-disable class-methods-use-this */
 import '../component/NavbarComponent';
 
 class Dashboard extends HTMLElement {
-  // eslint-disable-next-line class-methods-use-this
+  // eslint-disable-next-line consistent-return
   async loadUserRecipes() {
     try {
       console.log('fetching user recipes data...');
@@ -18,7 +19,7 @@ class Dashboard extends HTMLElement {
 
   // eslint-disable-next-line class-methods-use-this
   disconnectedCallback() {
-    this.data = undefined;
+    // this.data = undefined;
   }
 
   connectedCallback() {
@@ -28,15 +29,15 @@ class Dashboard extends HTMLElement {
 
     this.loadUserRecipes()
       .then((data) => {
-        this.data = data;
+        // this.data = data;
         setTimeout(() => {
-          this.render();
+          this.render(data);
         }, 1500);
       });
   }
 
-  render() {
-    if (!this.data) {
+  render(data) {
+    if (!data) {
       this.innerHTML = `
         <navbar-component></navbar-component>
         <h1>Dashboard Page</h1>
