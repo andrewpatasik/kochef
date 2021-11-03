@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-const fetchRecipes = async (endpoint) => {
+const fetchUserData = async (endpoint) => {
   try {
-    // const PROXY_URL = 'https://cors.bridged.cc/';
-    const BASE_URL = 'https://masak-apa.tomorisakura.vercel.app';
+    const BASE_URL = 'https://randomuser.me/api/';
 
     const response = await axios.get(`${BASE_URL + endpoint}`);
     if (response.status !== 200) {
@@ -17,6 +16,4 @@ const fetchRecipes = async (endpoint) => {
   }
 };
 
-export default fetchRecipes;
-
-// https://randomuser.me/api/?exc=login, gender, dob, registered
+export default fetchUserData;

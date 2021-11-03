@@ -13,8 +13,7 @@ class RecipeDetails extends HTMLElement {
     this.details = null;
   }
 
-  connectedCallback() {
-    console.log('details');
+  connectedCallback() { 
     if (window.localStorage) {
       if (!window.localStorage.getItem('savedRecipe')) {
         this.isSaved = false;
