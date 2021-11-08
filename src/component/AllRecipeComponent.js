@@ -1,8 +1,70 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-underscore-dangle */
 import './RecipeCardComponent';
+import './LoadingIndicatorComponent';
+import fakeData from '../data/fakeData.json';
+import useState from '../data/useState';
 
 class AllRecipeComponent extends HTMLElement {
+  constructor() {
+    super();
+
+    const [getAllRecipeState, setAllRecipeState] = useState([]);
+    this.getAllRecipeState = getAllRecipeState;
+    this.setAllRecipeState = setAllRecipeState;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  initObserver() {
+    const target = this.lastChild;
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.75,
+    };
+
+    const handlePaginationEvent = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          this.populatePage(fakeData)
+            .then(() => {
+              setTimeout(() => {
+                this.render();
+                const paginationObserver = this.initObserver();
+                paginationObserver.startObserve();
+              }, 1500);
+            });
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handlePaginationEvent, options);
+
+    const startObserve = () => {
+      observer.observe(target);
+    };
+
+    const stopObserve = () => {
+      observer.unobserve(target);
+    };
+
+    return { startObserve, stopObserve };
+  }
+
+  async populatePage(recipeData) {
+    let newRecipeData = this.getAllRecipeState();
+    newRecipeData = newRecipeData.concat(recipeData);
+
+    await this.setAllRecipeState([...newRecipeData]);
+    const allRecipeState = this.getAllRecipeState();
+    this.data = allRecipeState;
+  }
+
+  disconnectedCallback() {
+    const paginationObserver = this.initObserver();
+    paginationObserver.stopObserve();
+
+    this.setAllRecipeState([]);
+  }
+
   connectedCallback() {
     this.classList.add('grid');
     this.classList.add('grid-cols-1');
@@ -10,19 +72,22 @@ class AllRecipeComponent extends HTMLElement {
     this.classList.add('overflow-scroll');
 
     this.render();
-  }
 
-  set recipeCardData(data) {
-    this._data = data || [];
-
-    this.render();
+    this.populatePage(fakeData)
+      .then(() => {
+        setTimeout(() => {
+          this.render();
+          const paginationObserver = this.initObserver();
+          paginationObserver.startObserve();
+        }, 1500);
+      });
   }
 
   render() {
     this.innerHTML = '';
 
-    if (this._data) {
-      this._data.forEach((data) => {
+    if (this.data) {
+      this.data.forEach((data) => {
         const recipeCardElement = document.createElement('recipe-card');
         recipeCardElement.cardDetail = data;
 
@@ -35,8 +100,11 @@ class AllRecipeComponent extends HTMLElement {
 
         this.appendChild(recipeCardElement);
       });
+
+      const loadingIndicator = document.createElement('loading-indicator');
+      this.appendChild(loadingIndicator);
     } else {
-      for (let index = 0; index < 3; index++) {
+      for (let index = 0; index < 3; index += 1) {
         const recipeCardElement = document.createElement('recipe-card');
 
         recipeCardElement.setAttribute('img-border', 'rounded-md');
