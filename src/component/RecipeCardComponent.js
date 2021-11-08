@@ -79,8 +79,8 @@ class RecipeCardComponent extends HTMLElement {
       this.innerHTML = `
       <div class="animate-pulse flex flex-col w-full h-full justify-end border border-gray-400 p-2">
         <div class="h-full bg-gray-400 mb-2"></div>
-        <div class="h-4 bg-gray-400 mb-2"></div>
-        <div class="h-4 bg-gray-400 w-3/4"></div>
+        <div class="h-10 bg-gray-400 mb-2"></div>
+        <div class="h-6 bg-gray-400 w-3/4"></div>
       </div>
       `;
     }

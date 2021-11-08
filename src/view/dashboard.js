@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 import '../component/NavbarComponent';
-import fetchUserData from '../data/fetchUserData';
 import '../component/SearchComponent';
 import '../component/RecipeCardComponent';
+import fetchUserData from '../data/fetchUserData';
 
 class Dashboard extends HTMLElement {
   // eslint-disable-next-line consistent-return
@@ -54,7 +54,8 @@ class Dashboard extends HTMLElement {
 
   // eslint-disable-next-line class-methods-use-this
   disconnectedCallback() {
-    //
+    this.userData = null;
+    this.recipeData = null;
   }
 
   connectedCallback() {
@@ -70,9 +71,11 @@ class Dashboard extends HTMLElement {
           .then((recipeData) => {
             this.recipeData = recipeData;
             this.render();
+          }).catch((errorMessage) => {
+            console.error(`loadUserRecipeError ${errorMessage}`);
           });
       }).catch((errorMessage) => {
-        console.log(errorMessage);
+        console.error(`loadUserDataError ${errorMessage}`);
       });
   }
 
@@ -80,8 +83,33 @@ class Dashboard extends HTMLElement {
     if (!this.userData) {
       this.innerHTML = `
         <navbar-component></navbar-component>
-        <h1>Skeleton Loader Displayed</h1>
+        <section id="user-hero-skeleton" class="flex flex-wrap items-center justify-evenly w-full h-full p-2 animate-pulse">
+          <div class="rounded-full w-24 h-24 mb-2 bg-gray-400"></div>
+          <div id="user-bio" class="w-1/2 h-3/4">
+            <div class="w-3/4 h-4 bg-gray-400 my-2"></div>
+            <div class="w-1/2 h-4 bg-gray-400 my-2"></div>
+          </div>
+          <ul class="flex w-full h-full justify-evenly my-2">
+            <li class="w-1/3 h-full p-2">
+              <div class="w-full h-4 bg-gray-400 my-2"></div>
+              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+            </li>
+            <li class="w-1/3 h-full p-2">
+              <div class="w-full h-4 bg-gray-400 my-2"></div>
+              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+            </li>
+            <li class="w-1/3 h-full p-2">
+              <div class="w-full h-4 bg-gray-400 my-2"></div>
+              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+            </li>
+          </ul>
+        </section>
+        <div class="flex items-center justify-evenly w-full h-20 p-2 animate-pulse">
+          <div class="w-3/4 h-6 m-2 bg-gray-400"></div> 
+          <div class="w-1/2 h-6 m-2 bg-gray-400"></div> 
+        </div>
       `;
+      this.loadSkeleton();
     } else {
       const { name, location, picture } = this.userData;
 
@@ -89,7 +117,7 @@ class Dashboard extends HTMLElement {
         <navbar-component></navbar-component>
         <section id="user-hero" class="flex flex-wrap items-center justify-evenly w-full h-3/4 p-2 bg-yellow-100 text-green-800 shadow-lg">
           <img src="${picture.large}"  alt="user-avatar" class="rounded-full w-24 h-24 mb-2"/>
-          <div class="user-bio">
+          <div id="user-bio">
             <h2>${name.first.concat(' ', name.last)}</h2>
             <p>${location.city}</p>
           </div>

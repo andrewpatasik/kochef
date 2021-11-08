@@ -12,7 +12,6 @@ class AllRecipeComponent extends HTMLElement {
     this.setAllRecipeState = setAllRecipeState;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   initObserver() {
     const target = this.lastChild;
     const options = {
