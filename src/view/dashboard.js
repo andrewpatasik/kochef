@@ -41,9 +41,11 @@ class Dashboard extends HTMLElement {
       }
     } else {
       recipeData.forEach((data) => {
-        const recipeCardElement = document.createElement('recipe-card');
         const userRecipeContainer = document.createElement('div');
+        const recipeCardElement = document.createElement('recipe-card');
         const deleteIcon = document.createElement('div');
+
+        deleteIcon.classList.add('delete-icon');
         deleteIcon.classList.add('bg-white');
         deleteIcon.classList.add('text-gray-400');
         deleteIcon.classList.add('p-1');
@@ -56,14 +58,18 @@ class Dashboard extends HTMLElement {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         `;
+
+        userRecipeContainer.classList.add('recipe-container');
         userRecipeContainer.classList.add('relative');
-        recipeCardElement.cardDetail = { ...data, portion: data.servings };
 
         recipeCardElement.setAttribute('img-border', 'rounded-md');
         recipeCardElement.classList.add('w-auto');
         recipeCardElement.classList.add('h-52');
         recipeCardElement.classList.add('m-2');
+
         recipeCardElement.id = data.key;
+        recipeCardElement.cardDetail = { ...data, portion: data.servings };
+
         userRecipeContainer.append(recipeCardElement, deleteIcon);
         this.querySelector('#user-recipe-list').appendChild(userRecipeContainer);
       });
@@ -90,6 +96,13 @@ class Dashboard extends HTMLElement {
             .then((recipeData) => {
               this.recipeData = recipeData;
               this.render();
+              const deleteIconElements = this.querySelectorAll('.delete-icon');
+              deleteIconElements.forEach((icon) => {
+                icon.addEventListener('click', () => {
+                  const recipeId = icon.parentNode.querySelector('recipe-card').id;
+                  console.log(recipeId);
+                });
+              });
             }).catch((errorMessage) => {
               console.error(`loadUserRecipeError ${errorMessage}`);
             });
