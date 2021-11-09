@@ -1,7 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import '../component/NavbarComponent';
-import '../component/SearchComponent';
-import '../component/RecipeCardComponent';
+import '../component/NavbarComponent'; import '../component/SearchComponent'; import '../component/RecipeCardComponent';
 import fetchUserData from '../data/fetchUserData';
 
 class Dashboard extends HTMLElement {
@@ -20,36 +18,56 @@ class Dashboard extends HTMLElement {
   }
 
   async loadUserData(userUrl) {
-    return fetchUserData(userUrl)
-      .then((result) => result[0])
-      .catch((errorMessage) => errorMessage);
-  }
-
-  loadSkeleton() {
-    for (let index = 0; index < 3; index += 1) {
-      const recipeCardElement = document.createElement('recipe-card');
-
-      recipeCardElement.setAttribute('img-border', 'rounded-md');
-      recipeCardElement.classList.add('w-auto');
-      recipeCardElement.classList.add('h-52');
-      recipeCardElement.classList.add('m-2');
-
-      this.appendChild(recipeCardElement);
+    try {
+      const userData = await fetchUserData(userUrl)
+        .then((result) => result[0])
+        .catch((errorMessage) => errorMessage);
+      return userData;
+    } catch (error) {
+      return error;
     }
   }
 
-  loadRecipe(recipeData) {
-    recipeData.forEach((data) => {
-      const recipeCardElement = document.createElement('recipe-card');
-      recipeCardElement.cardDetail = data;
+  loadRecipeCard(recipeData) {
+    if (!recipeData) {
+      for (let index = 0; index < 3; index += 1) {
+        const recipeCardElement = document.createElement('recipe-card');
 
-      recipeCardElement.setAttribute('img-border', 'rounded-md');
-      recipeCardElement.classList.add('w-auto');
-      recipeCardElement.classList.add('h-52');
-      recipeCardElement.classList.add('m-2');
-      recipeCardElement.id = data.key;
-      this.appendChild(recipeCardElement);
-    });
+        recipeCardElement.setAttribute('img-border', 'rounded-md');
+        recipeCardElement.classList.add('w-auto');
+        recipeCardElement.classList.add('h-52');
+        recipeCardElement.classList.add('m-2');
+        this.querySelector('#user-recipe-list').appendChild(recipeCardElement);
+      }
+    } else {
+      recipeData.forEach((data) => {
+        const recipeCardElement = document.createElement('recipe-card');
+        const userRecipeContainer = document.createElement('div');
+        const deleteIcon = document.createElement('div');
+        deleteIcon.classList.add('bg-white');
+        deleteIcon.classList.add('text-gray-400');
+        deleteIcon.classList.add('p-1');
+        deleteIcon.classList.add('rounded-full');
+        deleteIcon.classList.add('absolute');
+        deleteIcon.classList.add('right-4');
+        deleteIcon.classList.add('top-3');
+        deleteIcon.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        `;
+        userRecipeContainer.classList.add('relative');
+        recipeCardElement.cardDetail = { ...data, portion: data.servings };
+
+        recipeCardElement.setAttribute('img-border', 'rounded-md');
+        recipeCardElement.classList.add('w-auto');
+        recipeCardElement.classList.add('h-52');
+        recipeCardElement.classList.add('m-2');
+        recipeCardElement.id = data.key;
+        userRecipeContainer.append(recipeCardElement, deleteIcon);
+        this.querySelector('#user-recipe-list').appendChild(userRecipeContainer);
+      });
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -67,13 +85,15 @@ class Dashboard extends HTMLElement {
       .then((userData) => {
         this.userData = userData;
         this.render();
-        this.loadUserRecipes()
-          .then((recipeData) => {
-            this.recipeData = recipeData;
-            this.render();
-          }).catch((errorMessage) => {
-            console.error(`loadUserRecipeError ${errorMessage}`);
-          });
+        setTimeout(() => {
+          this.loadUserRecipes()
+            .then((recipeData) => {
+              this.recipeData = recipeData;
+              this.render();
+            }).catch((errorMessage) => {
+              console.error(`loadUserRecipeError ${errorMessage}`);
+            });
+        }, 1500);
       }).catch((errorMessage) => {
         console.error(`loadUserDataError ${errorMessage}`);
       });
@@ -92,15 +112,15 @@ class Dashboard extends HTMLElement {
           <ul class="flex w-full h-full justify-evenly my-2">
             <li class="w-1/3 h-full p-2">
               <div class="w-full h-4 bg-gray-400 my-2"></div>
-              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+              <div class="w-16 h-12 bg-gray-400 m-auto"></div>
             </li>
             <li class="w-1/3 h-full p-2">
               <div class="w-full h-4 bg-gray-400 my-2"></div>
-              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+              <div class="w-16 h-12 bg-gray-400 m-auto"></div>
             </li>
             <li class="w-1/3 h-full p-2">
               <div class="w-full h-4 bg-gray-400 my-2"></div>
-              <div class="w-16 h-16 bg-gray-400 m-auto"></div>
+              <div class="w-16 h-12 bg-gray-400 m-auto"></div>
             </li>
           </ul>
         </section>
@@ -108,8 +128,9 @@ class Dashboard extends HTMLElement {
           <div class="w-3/4 h-6 m-2 bg-gray-400"></div> 
           <div class="w-1/2 h-6 m-2 bg-gray-400"></div> 
         </div>
+        <section id="user-recipe-list"></section>
       `;
-      this.loadSkeleton();
+      this.loadRecipeCard();
     } else {
       const { name, location, picture } = this.userData;
 
@@ -124,15 +145,15 @@ class Dashboard extends HTMLElement {
           <ul class="flex w-full justify-evenly my-2 text-center">
             <li>
               <span>Resep Dibuat</span> 
-              <h2>10</h2>
+              <h2>${!this.recipeData ? '0' : this.recipeData.length}</h2>
             </li>
             <li>
               <span>Resep Disimpan</span> 
-              <h2>20</h2>
+              <h2>${!this.recipeData ? '0' : this.recipeData.length}</h2>
             </li> 
             <li>
               <span>Suka</span> 
-              <h2>201</h2>
+              <h2>${!this.recipeData ? '0' : this.recipeData.length}</h2>
             </li>            
           </ul>
         </section>
@@ -145,12 +166,9 @@ class Dashboard extends HTMLElement {
           </select>
         </div>
         <h3 class="mx-4 tracking-wide">Resep Disimpan</h3>
+        <section id="user-recipe-list"></section>
         `;
-      if (!this.recipeData) {
-        this.loadSkeleton();
-      } else {
-        this.loadRecipe(this.recipeData);
-      }
+      this.loadRecipeCard(this.recipeData);
     }
   }
 }
