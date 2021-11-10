@@ -71,7 +71,20 @@ class Dashboard extends HTMLElement {
         recipeCardElement.cardDetail = { ...data, portion: data.servings };
 
         userRecipeContainer.append(recipeCardElement, deleteIcon);
-        this.querySelector('#user-recipe-list').appendChild(userRecipeContainer);
+        this.querySelector('#user-recipe-list').appendChild(userRecipeContainer); 
+
+        deleteIcon.addEventListener('click', () => {
+          const recipeId = recipeCardElement.id;
+          const recipeIndex = this.recipeData
+            .findIndex((recipe) => recipe.key === recipeId);
+
+          const updatedRecipeData = [...this.recipeData];
+          updatedRecipeData.splice(recipeIndex, 1);
+
+          this.recipeData = [...updatedRecipeData];
+          console.log('fire delete');
+          this.render();
+        });
       });
     }
   }
@@ -91,22 +104,13 @@ class Dashboard extends HTMLElement {
       .then((userData) => {
         this.userData = userData;
         this.render();
-        setTimeout(() => {
-          this.loadUserRecipes()
-            .then((recipeData) => {
-              this.recipeData = recipeData;
-              this.render();
-              const deleteIconElements = this.querySelectorAll('.delete-icon');
-              deleteIconElements.forEach((icon) => {
-                icon.addEventListener('click', () => {
-                  const recipeId = icon.parentNode.querySelector('recipe-card').id;
-                  console.log(recipeId);
-                });
-              });
-            }).catch((errorMessage) => {
-              console.error(`loadUserRecipeError ${errorMessage}`);
-            });
-        }, 1500);
+        this.loadUserRecipes()
+          .then((recipeData) => {
+            this.recipeData = recipeData;
+            this.render();
+          }).catch((errorMessage) => {
+            console.error(`loadUserRecipeError ${errorMessage}`);
+          });
       }).catch((errorMessage) => {
         console.error(`loadUserDataError ${errorMessage}`);
       });
