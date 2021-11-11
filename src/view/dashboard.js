@@ -10,7 +10,7 @@ class Dashboard extends HTMLElement {
   async loadUserRecipes() {
     try {
       if (window.localStorage) {
-        const userRecipeFromStorage = await JSON.parse(window.localStorage.getItem('savedRecipe'));
+        const userRecipeFromStorage = await JSON.parse(window.localStorage.getItem('userCache')).saved;
         if (userRecipeFromStorage && userRecipeFromStorage.length) {
           return userRecipeFromStorage;
         }
@@ -84,7 +84,7 @@ class Dashboard extends HTMLElement {
           const updatedRecipeData = [...this.recipeData];
           updatedRecipeData.splice(recipeIndex, 1);
 
-          updateRecipe(updatedRecipeData);
+          updateRecipe('saved', updatedRecipeData);
 
           this.loadUserRecipes()
             .then((updatedRecipe) => {

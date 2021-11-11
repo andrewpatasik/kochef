@@ -15,10 +15,11 @@ class RecipeDetails extends HTMLElement {
 
   connectedCallback() {
     if (window.localStorage) {
-      if (!window.localStorage.getItem('savedRecipe')) {
+      const isCacheExisted = JSON.parse(localStorage.getItem('userCache')).saved;
+      if (isCacheExisted[0] === null) {
         this.isSaved = false;
       } else {
-        const recipeFromStorage = JSON.parse(window.localStorage.getItem('savedRecipe'));
+        const recipeFromStorage = JSON.parse(window.localStorage.getItem('userCache')).saved;
         const recipeKey = this.getAttribute('id');
         this.isSaved = recipeFromStorage.some((recipe) => recipe.key === recipeKey);
       }

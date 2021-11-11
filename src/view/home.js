@@ -18,6 +18,13 @@ class Home extends HTMLElement {
           selected: [],
         }));
       }
+      if (!localStorage.getItem('userCache')) {
+        localStorage.setItem('userCache', JSON.stringify({
+          saved: [],
+          created: [],
+          likes: [],
+        }));
+      }
     }
   }
 

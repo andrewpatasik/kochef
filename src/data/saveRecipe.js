@@ -1,16 +1,17 @@
 const saveRecipe = (data, opt) => {
+  // caches option is for firebase storage (not implemented yet)
+  // eslint-disable-next-line no-unused-vars
   const { caches } = opt;
   if (window.localStorage) {
-    if (!window.localStorage.getItem('savedRecipe')) {
-      window.localStorage.setItem('savedRecipe', JSON.stringify([]));
-    }
-    const recipeData = JSON.parse(window.localStorage.getItem('savedRecipe'));
-    if (recipeData.some((recipe) => recipe.key === data.key)) {
+    const cached = JSON.parse(window.localStorage.getItem('userCache'));
+    const userSavedRecipe = JSON.parse(window.localStorage.getItem('userCache')).saved;
+    if (userSavedRecipe.some((recipe) => recipe.key === data.key)) {
       console.log('recipe already saved');
       return;
     }
-    const newRecipeData = [...recipeData, data];
-    window.localStorage.setItem('savedRecipe', JSON.stringify(newRecipeData));
+    const newRecipeData = [...userSavedRecipe, data];
+
+    window.localStorage.setItem('userCache', JSON.stringify({ ...cached, saved: newRecipeData }));
     console.log('recipe saved');
   }
 };
