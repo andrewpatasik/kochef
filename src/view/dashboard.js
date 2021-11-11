@@ -1,6 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import '../component/NavbarComponent'; import '../component/SearchComponent'; import '../component/RecipeCardComponent';
+import '../component/NavbarComponent';
+import '../component/SearchComponent';
+import '../component/RecipeCardComponent';
 import fetchUserData from '../data/fetchUserData';
+import updateRecipe from '../data/updateRecipe';
 
 class Dashboard extends HTMLElement {
   // eslint-disable-next-line consistent-return
@@ -71,7 +74,7 @@ class Dashboard extends HTMLElement {
         recipeCardElement.cardDetail = { ...data, portion: data.servings };
 
         userRecipeContainer.append(recipeCardElement, deleteIcon);
-        this.querySelector('#user-recipe-list').appendChild(userRecipeContainer); 
+        this.querySelector('#user-recipe-list').appendChild(userRecipeContainer);
 
         deleteIcon.addEventListener('click', () => {
           const recipeId = recipeCardElement.id;
@@ -81,9 +84,13 @@ class Dashboard extends HTMLElement {
           const updatedRecipeData = [...this.recipeData];
           updatedRecipeData.splice(recipeIndex, 1);
 
-          this.recipeData = [...updatedRecipeData];
-          console.log('fire delete');
-          this.render();
+          updateRecipe(updatedRecipeData);
+
+          this.loadUserRecipes()
+            .then((updatedRecipe) => {
+              this.recipeData = updatedRecipe;
+              this.render();
+            });
         });
       });
     }
