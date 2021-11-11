@@ -13,7 +13,8 @@ const fetchRecipes = async (endpoint) => {
     const { data } = response;
     return data.results;
   } catch (error) {
-    return `something not right: error ${error}`;
+    console.log(`something not right: ${error}`);
+    return [];
   }
 };
 

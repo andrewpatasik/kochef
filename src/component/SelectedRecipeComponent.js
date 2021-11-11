@@ -65,7 +65,10 @@ class SelectedRecipeComponent extends HTMLElement {
             this.data = selectedRecipeState;
             this.render();
 
-            cacheRecipeData('selected', selectedRecipeState);
+            cacheRecipeData(selectedRecipeState, {
+              storageName: 'userRecipeData',
+              category: 'selected',
+            });
           });
       }
     }

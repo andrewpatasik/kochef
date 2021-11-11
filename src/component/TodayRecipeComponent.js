@@ -1,6 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable import/no-cycle */
-/* eslint-disable no-underscore-dangle */
 import router from '../script/router';
 import cacheRecipeData from '../data/cachedRecipeData';
 import fetchRecipes from '../data/fetchRecipes';
@@ -41,7 +38,10 @@ class TodayRecipeComponent extends HTMLElement {
               router(`/recipe-details/:${todayRecipeState.key}`);
             });
 
-            cacheRecipeData('today', todayRecipeState);
+            cacheRecipeData(todayRecipeState, {
+              storageName: 'userRecipeData',
+              category: 'today',
+            });
           });
       }
     }
