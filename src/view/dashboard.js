@@ -16,13 +16,11 @@ class Dashboard extends HTMLElement {
   }
 
   // eslint-disable-next-line consistent-return
-  async loadUserRecipes() {
+  async fetchUserRecipes() {
     try {
       if (window.localStorage) {
         const userRecipeFromStorage = await JSON.parse(window.localStorage.getItem('userCache')).saved;
-        if (userRecipeFromStorage && userRecipeFromStorage.length) {
-          return userRecipeFromStorage;
-        }
+        return userRecipeFromStorage;
       }
     } catch (error) {
       return error;
@@ -52,15 +50,11 @@ class Dashboard extends HTMLElement {
 
         recipeCardElement.setElementAttribute({
           name: 'class',
-          values: [
-            'w-auto',
-            'h-52',
-            'm-2',
-          ],
+          values: ['w-auto', 'h-52', 'm-2'],
         });
         this.querySelector('#user-recipe-list').appendChild(recipeCardElement.getElement());
       }
-    } else {
+    } else if (recipeData && recipeData.length > 0) {
       recipeData.forEach((data) => {
         const userRecipeContainer = CreateDOM('div');
         const recipeCardElement = CreateDOM('recipe-card');
@@ -68,10 +62,7 @@ class Dashboard extends HTMLElement {
 
         userRecipeContainer.setElementAttribute({
           name: 'class',
-          values: [
-            'recipe-container',
-            'relative',
-          ],
+          values: ['recipe-container', 'relative'],
         });
 
         recipeCardElement.setElementAttribute({
@@ -84,11 +75,7 @@ class Dashboard extends HTMLElement {
         });
         recipeCardElement.setElementAttribute({
           name: 'class',
-          values: [
-            'w-auto',
-            'h-52',
-            'm-2',
-          ],
+          values: ['w-auto', 'h-52', 'm-2'],
         });
         recipeCardElement.getElement().cardDetail = { ...data, portion: data.servings };
 
@@ -127,32 +114,43 @@ class Dashboard extends HTMLElement {
             storageName: 'userCache',
             category: 'saved',
           });
-          this.loadUserRecipes()
+          this.fetchUserRecipes()
             .then((updatedRecipe) => {
+              console.log(updatedRecipe);
               this.recipeTotal = this.getRecipeTotal();
               this.recipeData = updatedRecipe;
               this.render();
             });
         });
       });
+    } else {
+      console.log(recipeData);
+      const noRecipe = CreateDOM('h2');
+      noRecipe.getElement().innerText = 'Tidak Ada Resep';
+      noRecipe.setElementAttribute({
+        name: 'class',
+        values: ['self-center', 'text-green-800'],
+      });
+      this.querySelector('#user-recipe-list').appendChild(noRecipe.getElement());
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   disconnectedCallback() {
     this.userData = null;
     this.recipeData = null;
   }
 
   connectedCallback() {
-    this.classList.add('block');
-    this.classList.add('mt-16');
+    this.classList.add('flex');
+    this.classList.add('flex-col');
+    this.classList.add('pt-16');
+    this.classList.add('min-h-screen');
     this.render();
 
     this.loadUserData('?seed=e7a63a5dc765414f&exc=login,gender,dob,registered')
       .then((userData) => {
         this.userData = userData;
-        this.loadUserRecipes()
+        this.fetchUserRecipes()
           .then((recipeData) => {
             this.recipeTotal = this.getRecipeTotal();
             this.recipeData = recipeData;
@@ -232,7 +230,7 @@ class Dashboard extends HTMLElement {
           </select>
         </div>
         <h3 class="mx-4 tracking-wide">Resep Disimpan</h3>
-        <section id="user-recipe-list"></section>
+        <section id="user-recipe-list" class="flex flex-col flex-1 justify-center"></section>
         `;
       this.loadRecipeCard(this.recipeData);
     }
