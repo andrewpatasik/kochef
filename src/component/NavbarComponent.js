@@ -15,17 +15,18 @@ class NavbarComponent extends HTMLElement {
     this.classList.add('bg-yellow-100');
 
     this.render();
-
     const elements = document.querySelectorAll('a');
     elements.forEach((element) => {
       element.addEventListener('click', (e) => {
         e.preventDefault();
-
+        if (element.getAttribute('id') === 'back') {
+          window.history.back();
+          return;
+        }
         if (element.id === '/logout') {
           const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
           localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
         }
-
         router(element.id);
       });
     });
@@ -35,7 +36,7 @@ class NavbarComponent extends HTMLElement {
     if (!this.getAttribute('home')) {
       this.innerHTML = `
       <div class="text-green-800">
-        <a href="#" id="/">
+        <a href="#" id="back">
           <div class="mx-1 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

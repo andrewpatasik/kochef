@@ -8,14 +8,6 @@ import CreateDOM from '../script/CreateDom';
 
 class Dashboard extends HTMLElement {
   // eslint-disable-next-line consistent-return
-  getRecipeTotal() {
-    if (window.localStorage) {
-      const userRecipeList = JSON.parse(window.localStorage.getItem('userCache'));
-      return userRecipeList;
-    }
-  }
-
-  // eslint-disable-next-line consistent-return
   async fetchUserRecipes() {
     try {
       if (window.localStorage) {
@@ -88,8 +80,8 @@ class Dashboard extends HTMLElement {
             'p-1',
             'rounded-full',
             'absolute',
-            'right-4',
-            'top-3',
+            'right-5',
+            'top-5',
           ],
         });
         deleteIcon.getElement().innerHTML = `
@@ -116,7 +108,6 @@ class Dashboard extends HTMLElement {
           });
           this.fetchUserRecipes()
             .then((updatedRecipe) => {
-              console.log(updatedRecipe);
               this.recipeTotal = this.getRecipeTotal();
               this.recipeData = updatedRecipe;
               this.render();
@@ -124,7 +115,6 @@ class Dashboard extends HTMLElement {
         });
       });
     } else {
-      console.log(recipeData);
       const noRecipe = CreateDOM('h2');
       noRecipe.getElement().innerText = 'Tidak Ada Resep';
       noRecipe.setElementAttribute({
@@ -133,6 +123,14 @@ class Dashboard extends HTMLElement {
       });
       this.querySelector('#user-recipe-list').appendChild(noRecipe.getElement());
     }
+  }
+
+  getRecipeTotal() {
+    if (window.localStorage) {
+      const userRecipeList = JSON.parse(window.localStorage.getItem('userCache'));
+      return userRecipeList;
+    }
+    return null;
   }
 
   disconnectedCallback() {

@@ -62,7 +62,9 @@ const urlMatcher = (pathname) => {
 
   if (foundMatch.pathname === '/search') {
     window.history.pushState(
-      {},
+      {
+        prevState: window.location.pathname,
+      },
       pathname,
       `${window.location.origin + foundMatch.pathname}?q=${foundMatch.param}`,
     );
@@ -72,7 +74,9 @@ const urlMatcher = (pathname) => {
 
   if (!foundMatch.param) {
     window.history.pushState(
-      {},
+      {
+        prevState: window.location.pathname,
+      },
       pathname,
       window.location.origin + foundMatch.pathname,
     );
