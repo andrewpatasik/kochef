@@ -1,3 +1,5 @@
+import historyState from './historyState';
+
 const rootElement = document.querySelector('#app');
 
 const routes = [
@@ -71,13 +73,17 @@ const urlMatcher = (pathname) => {
 
   if (!foundMatch.param) {
     window.history.pushState(
-      {},
+      {
+        prevState: historyState.getStack(),
+      },
       pathname,
       window.location.origin + foundMatch.pathname,
     );
   } else {
     window.history.pushState(
-      {},
+      {
+        prevState: historyState.getStack(),
+      },
       pathname,
       `${window.location.origin + foundMatch.pathname}/${foundMatch.param}`,
     );

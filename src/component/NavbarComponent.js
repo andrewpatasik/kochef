@@ -1,3 +1,5 @@
+import historyState from '../script/historyState';
+
 class NavbarComponent extends HTMLElement {
   connectedCallback() {
     this.classList.add('flex');
@@ -20,14 +22,17 @@ class NavbarComponent extends HTMLElement {
 
         import('../script/router')
           .then(({ default: router }) => {
-            if (element.getAttribute('id') === 'back') {
-              window.history.back();
+            if (this.getAttribute('home')) historyState.setState(window.location.pathname);
+
+            if (element.id === 'back') {
+              router(historyState.getState());
               return;
             }
             if (element.id === '/logout') {
               const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
               localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
             }
+
             router(element.id);
           });
       });

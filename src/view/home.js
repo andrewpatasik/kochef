@@ -34,7 +34,6 @@ class Home extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('home');
     window.scrollTo(0, 0);
 
     this.classList.add('flex');

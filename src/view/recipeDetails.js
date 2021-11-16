@@ -12,7 +12,6 @@ class RecipeDetails extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('recipe details');
     if (window.localStorage) {
       const isCacheExisted = JSON.parse(localStorage.getItem('userCache')).saved;
       if (isCacheExisted[0] === null) {

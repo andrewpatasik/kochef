@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+import historyState from '../script/historyState';
 
 class RecipeCardComponent extends HTMLElement {
   static get observedAttributes() {
@@ -24,6 +25,7 @@ class RecipeCardComponent extends HTMLElement {
       this.addEventListener('click', () => {
         import('../script/router')
           .then(({ default: router }) => {
+            historyState.setState(window.location.pathname);
             router(`/recipe-details/:${this.id}`);
           });
       });

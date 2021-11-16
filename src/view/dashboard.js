@@ -141,7 +141,6 @@ class Dashboard extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log('dashboard');
     this.classList.add('flex');
     this.classList.add('flex-col');
     this.classList.add('pt-16');
