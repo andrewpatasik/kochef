@@ -1,6 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-// eslint-disable-next-line import/no-cycle
-import router from '../script/router';
 
 class RecipeCardComponent extends HTMLElement {
   static get observedAttributes() {
@@ -24,7 +22,10 @@ class RecipeCardComponent extends HTMLElement {
 
     if (this.id) {
       this.addEventListener('click', () => {
-        router(`/recipe-details/:${this.id}`);
+        import('../script/router')
+          .then(({ default: router }) => {
+            router(`/recipe-details/:${this.id}`);
+          });
       });
     }
   }

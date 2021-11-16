@@ -1,10 +1,8 @@
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
+import '../component/NavbarComponent';
 import '../component/RecipeCardComponent';
 import '../component/SliderComponent';
-import fakeDetailsData from '../data/fakeDetailsData.json';
+// import fakeDetailsData from '../data/fakeDetailsData.json';
 import useState from '../data/useState';
-import '../component/NavbarComponent';
 import fetchRecipes from '../data/fetchRecipes';
 import saveRecipe from '../data/saveRecipe';
 
@@ -14,6 +12,7 @@ class RecipeDetails extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log('recipe details');
     if (window.localStorage) {
       const isCacheExisted = JSON.parse(localStorage.getItem('userCache')).saved;
       if (isCacheExisted[0] === null) {

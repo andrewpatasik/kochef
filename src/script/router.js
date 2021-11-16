@@ -1,42 +1,41 @@
-import '../view/home';
-import '../view/login';
-import '../view/dashboard';
-import '../view/search';
-import '../view/recipeDetails';
-import '../view/404';
-
 const rootElement = document.querySelector('#app');
 
 const routes = [
   {
     pathname: '/',
     param: null,
-    component: document.createElement('home-element'),
+    moduleName: 'home',
+    componentName: 'home-element',
   },
   {
     pathname: '/login',
     param: null,
-    component: document.createElement('login-element'),
+    moduleName: 'login',
+    componentName: 'login-element',
   },
   {
     pathname: '/dashboard',
     param: null,
-    component: document.createElement('dashboard-element'),
+    moduleName: 'dashboard',
+    componentName: 'dashboard-element',
   },
   {
     pathname: '/recipe-details',
     param: null,
-    component: document.createElement('recipe-details'),
+    moduleName: 'recipeDetails',
+    componentName: 'recipe-details',
   },
   {
     pathname: '/search',
     param: null,
-    component: document.createElement('search-result'),
+    moduleName: 'search',
+    componentName: 'search-result',
   },
   {
     pathname: '/404',
     param: null,
-    component: document.createElement('not-found'),
+    moduleName: '404',
+    componentName: 'not-found',
   },
 ];
 
@@ -62,9 +61,7 @@ const urlMatcher = (pathname) => {
 
   if (foundMatch.pathname === '/search') {
     window.history.pushState(
-      {
-        prevState: window.location.pathname,
-      },
+      {},
       pathname,
       `${window.location.origin + foundMatch.pathname}?q=${foundMatch.param}`,
     );
@@ -74,9 +71,7 @@ const urlMatcher = (pathname) => {
 
   if (!foundMatch.param) {
     window.history.pushState(
-      {
-        prevState: window.location.pathname,
-      },
+      {},
       pathname,
       window.location.origin + foundMatch.pathname,
     );
@@ -95,15 +90,20 @@ const loadPage = (prop) => {
   const {
     pathname,
     param,
-    component,
+    moduleName,
+    componentName,
   } = prop;
 
-  if (pathname === '/recipe-details') {
-    component.id = param;
-    rootElement.append(component);
-  } else {
-    rootElement.append(component);
-  }
+  import(`../view/${moduleName}`)
+    .then(() => {
+      const component = document.createElement(componentName);
+      if (pathname === '/recipe-details') {
+        component.id = param;
+        rootElement.append(component);
+      } else {
+        rootElement.append(component);
+      }
+    });
 };
 
 const router = (pathname) => {

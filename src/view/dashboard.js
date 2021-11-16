@@ -1,24 +1,25 @@
-/* eslint-disable class-methods-use-this */
 import '../component/NavbarComponent';
-import '../component/SearchComponent';
 import '../component/RecipeCardComponent';
+import '../component/SearchComponent';
 import fetchUserData from '../data/fetchUserData';
 import cacheRecipeData from '../data/cachedRecipeData';
 import CreateDOM from '../script/CreateDom';
 
 class Dashboard extends HTMLElement {
-  // eslint-disable-next-line consistent-return
+  // eslint-disable-next-line class-methods-use-this
   async fetchUserRecipes() {
     try {
       if (window.localStorage) {
         const userRecipeFromStorage = await JSON.parse(window.localStorage.getItem('userCache')).saved;
         return userRecipeFromStorage;
       }
+      return 'your browser does not support localStorage';
     } catch (error) {
       return error;
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   async loadUserData(userUrl) {
     try {
       const userData = await fetchUserData(userUrl)
@@ -125,6 +126,7 @@ class Dashboard extends HTMLElement {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getRecipeTotal() {
     if (window.localStorage) {
       const userRecipeList = JSON.parse(window.localStorage.getItem('userCache'));
@@ -139,6 +141,7 @@ class Dashboard extends HTMLElement {
   }
 
   connectedCallback() {
+    console.log('dashboard');
     this.classList.add('flex');
     this.classList.add('flex-col');
     this.classList.add('pt-16');
