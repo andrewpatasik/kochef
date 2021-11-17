@@ -25,15 +25,14 @@ class NavbarComponent extends HTMLElement {
             if (this.getAttribute('home')) historyState.setState(window.location.pathname);
 
             if (element.id === 'back') {
-              router(historyState.getState());
-              return;
+              return !historyState.getStack().length > 0 ? router('/') : router(historyState.getState());
             }
             if (element.id === '/logout') {
               const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
               localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
             }
 
-            router(element.id);
+            return router(element.id);
           });
       });
     });

@@ -1,6 +1,3 @@
-// eslint-disable-next-line import/no-cycle
-import router from '../script/router';
-
 class SearchComponent extends HTMLElement {
   connectedCallback() {
     this.classList.add('flex');
@@ -12,12 +9,16 @@ class SearchComponent extends HTMLElement {
     this.render();
 
     this.querySelector('input').addEventListener('change', () => {
-      const inputVal = this.querySelector('input').value;
-      if (!this.getAttribute('home')) {
-        console.log(inputVal);
-      } else {
-        router(`/search/:${inputVal}`);
-      }
+      import('../script/router')
+        .then(({ default: router }) => {
+          // navigation back not yet implemented here
+          const inputVal = this.querySelector('input').value;
+          if (!this.getAttribute('home')) {
+            console.log(inputVal);
+          } else {
+            router(`/search/:${inputVal}`);
+          }
+        });
     });
   }
 

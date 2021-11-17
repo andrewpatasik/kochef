@@ -25,7 +25,9 @@ class RecipeCardComponent extends HTMLElement {
       this.addEventListener('click', () => {
         import('../script/router')
           .then(({ default: router }) => {
-            historyState.setState(window.location.pathname);
+            if (historyState.getStack().length > 0) {
+              historyState.setState(window.location.pathname);
+            }
             router(`/recipe-details/:${this.id}`);
           });
       });
