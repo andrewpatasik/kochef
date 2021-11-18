@@ -52,14 +52,14 @@ class Home extends HTMLElement {
         <searchbar-component home="${true}" class="w-4/6"></searchbar-component>
       </div>
       <div id="heading-component" class="w-full px-2 my-4">
-        <h1 class="w-auto leading-none tracking-wide">Resep Hari Ini</h1>          
+        <h1 class="w-auto leading-none">Resep Hari Ini</h1>          
       </div>
       <today-recipe></today-recipe>
-      <h3 class="mx-2 w-1/2 leading-none tracking-wide">Kategori Pilihan</h3>
+      <h3 class="mx-2 w-1/2 leading-none">Kategori Pilihan</h3>
       <category-component></category-component>
-      <h3 class="mx-2 w-1/2 leading-none tracking-wide">Masakan Spesial Hari Raya</h3>
+      <h3 class="mx-2 w-1/2 leading-none">Masakan Spesial Hari Raya</h3>
       <selected-recipe></selected-recipe>
-      <h3 class="mx-2 tracking-wide">Semua Resep</h3>
+      <h3 class="mx-2">Semua Resep</h3>
       <all-recipe></all-recipe>
       `;
   }
