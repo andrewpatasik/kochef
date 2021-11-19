@@ -222,7 +222,7 @@ class Dashboard extends HTMLElement {
           </ul>
         </section>
         <div class="w-full h-20 flex items-center justify-evenly p-2">
-          <searchbar-component></searchbar-component>
+          <searchbar-component class="bg-white"></searchbar-component>
           <select id="filter-component" class="bg-white p-2 rounded-lg shadow-lg w-1/3 text-sm text-gray-400">
           <option>Filter resep</option>
             <option>Resep Dibuat</option>

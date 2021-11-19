@@ -142,7 +142,7 @@ class Search extends HTMLElement {
     this.innerHTML = `
         <navbar-component></navbar-component>
         <div class="p-2 text-green-800">
-          <h1>Search Result</h1>
+          <h1>Hasil Pencarian</h1>
           <span>${this.data ? `${this.searchResultsData.length} resep ditemukan` : 'mencari resep, tunggu...'} </span>
         </div>
       `;

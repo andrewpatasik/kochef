@@ -1,4 +1,5 @@
 import historyState from '../script/historyState';
+import router from '../script/router';
 
 class NavbarComponent extends HTMLElement {
   connectedCallback() {
@@ -19,47 +20,63 @@ class NavbarComponent extends HTMLElement {
     elements.forEach((element) => {
       element.addEventListener('click', (e) => {
         e.preventDefault();
+        // save history stack for homepage
+        if (this.getAttribute('home')) historyState.setState(window.location.pathname);
 
-        import('../script/router')
-          .then(({ default: router }) => {
-            if (this.getAttribute('home')) historyState.setState(window.location.pathname);
+        if (element.id === 'back') {
+          return !historyState.getStack().length > 0 ? router('/') : router(historyState.getState());
+        }
 
-            if (element.id === 'back') {
-              return !historyState.getStack().length > 0 ? router('/') : router(historyState.getState());
-            }
-            if (element.id === '/logout') {
-              const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
-              localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
-            }
+        // if (element.id === 'menu') {
+        //   console.log(element);
+        //   element.querySelector('#dropdown-menu').classList.toggle('hidden');
+        //   return null;
+        // }
 
-            return router(element.id);
-          });
+        if (element.id === '/logout') {
+          const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));
+          localStorage.setItem('userLoginSession', JSON.stringify({ ...userLoginSession, isLoggedIn: !userLoginSession.isLoggedIn }));
+        }
+        return router(element.id);
       });
     });
+
+    if (!this.getAttribute('home')) {
+      this.querySelector('nav').addEventListener('click', () => {
+        const dropdownMenu = this.querySelector('nav').querySelector('#dropdown-menu');
+        dropdownMenu.classList.toggle('hidden');
+      });
+    }
   }
 
   render() {
     if (!this.getAttribute('home')) {
       this.innerHTML = `
-      <div class="text-green-800">
-        <a href="#" id="back">
-          <div class="mx-1 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>Kembali</span>
-          </div>
-        </a>     
-      </div> 
-      
-        <nav class="flex items-start text-xs text-green-800">
-          <a href="#" id="/">
-            <div class="mx-1 flex flex-col items-center">
+        <div class="text-green-800">
+          <a href="#" id="back">
+            <div class="mx-1 flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-              </svg> 
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Kembali</span>
             </div>
-          </a> 
+          </a>     
+        </div> 
+
+        <nav class="relative flex flex-col items-start text-xs text-green-800">
+          <div class="mx-1 flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+            </svg>
+          </div>
+          <ul id="dropdown-menu" class="absolute w-20 -bottom-16 -left-14 px-1 bg-green-200 shadow-md rounded-md hidden">
+            <a href="#" id="/add-recipe">
+              <li class="my-2">Buat Resep</li>
+            </a>
+            <a href="#" id="/logout">
+            <li class="my-2">Logout</li>
+            </a>
+          </ul>
         </nav>
       `;
     } else {

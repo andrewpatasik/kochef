@@ -17,7 +17,7 @@ class RecipeCardComponent extends HTMLElement {
     this.classList.add('flex');
     this.classList.add('flex-col');
     this.classList.add('flex-shrink-0');
-    this.classList.add('bg-yellow-50');
+    this.classList.add('bg-gray-50');
 
     this.render();
 

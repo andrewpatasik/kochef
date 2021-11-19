@@ -34,6 +34,12 @@ const routes = [
     componentName: 'search-result',
   },
   {
+    pathname: '/add-recipe',
+    param: null,
+    moduleName: 'create',
+    componentName: 'create-element',
+  },
+  {
     pathname: '/404',
     param: null,
     moduleName: '404',
