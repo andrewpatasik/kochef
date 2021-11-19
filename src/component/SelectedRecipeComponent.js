@@ -16,6 +16,7 @@ class SelectedRecipeComponent extends HTMLElement {
     this.classList.add('flex');
     this.classList.add('flex-nowrap');
     this.classList.add('overflow-auto');
+    this.classList.add('no-scrollbar');
 
     this.render();
 

@@ -1,7 +1,7 @@
 class SearchComponent extends HTMLElement {
   connectedCallback() {
     this.classList.add('flex');
-    this.classList.add('p-3');
+    this.classList.add('p-2');
     this.classList.add('rounded-lg');
     this.classList.add('shadow-md');
     this.classList.add('bg-gray-100');

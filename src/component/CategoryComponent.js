@@ -8,11 +8,12 @@ class CategoryComponent extends HTMLElement {
 
     this.classList.add('w-full');
     this.classList.add('h-20');
+    this.classList.add('mt-2');
+    this.classList.add('mb-4');
     this.classList.add('flex');
     this.classList.add('flex-nowrap');
     this.classList.add('overflow-auto');
-    this.classList.add('mt-2');
-    this.classList.add('mb-4');
+    this.classList.add('no-scrollbar');
 
     setCategoryState(fakeCategory);
     this.categoryData = getCategoryState();

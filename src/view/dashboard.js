@@ -200,7 +200,7 @@ class Dashboard extends HTMLElement {
 
       this.innerHTML = `
         <navbar-component></navbar-component>
-        <section id="user-hero" class="flex flex-wrap items-center justify-evenly w-full h-3/4 p-2 bg-yellow-100 text-green-800 shadow-lg">
+        <section id="user-hero" class="flex flex-wrap items-center justify-evenly w-full h-3/4 p-2 bg-white text-green-800 shadow-lg">
           <img src="${picture.large}"  alt="user-avatar" class="rounded-full w-24 h-24 mb-2"/>
           <div id="user-bio">
             <h2>${name.first.concat(' ', name.last)}</h2>

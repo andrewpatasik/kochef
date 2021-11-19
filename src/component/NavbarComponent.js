@@ -11,7 +11,7 @@ class NavbarComponent extends HTMLElement {
     this.classList.add('p-2');
     this.classList.add('w-full');
     this.classList.add('h-16');
-    this.classList.add('bg-gray-50');
+    this.classList.add('bg-white');
 
     this.render();
 

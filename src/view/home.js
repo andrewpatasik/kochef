@@ -48,8 +48,8 @@ class Home extends HTMLElement {
 
     this.innerHTML = `
       <navbar-component home="${true}"></navbar-component>
-      <div class="w-full h-20 flex items-center justify-center">
-        <searchbar-component home="${true}" class="w-4/6"></searchbar-component>
+      <div class="w-full h-20 p-4 flex items-center justify-center">
+        <searchbar-component home="${true}" class="w-full"></searchbar-component>
       </div>
       <div id="heading-component" class="w-full px-2 my-4">
         <h1 class="w-auto leading-none">Resep Hari Ini</h1>          
