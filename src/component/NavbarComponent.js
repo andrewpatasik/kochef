@@ -20,18 +20,12 @@ class NavbarComponent extends HTMLElement {
     elements.forEach((element) => {
       element.addEventListener('click', (e) => {
         e.preventDefault();
-        // save history stack for homepage
+        // save homepage history
         if (this.getAttribute('home')) historyState.setState(window.location.pathname);
 
         if (element.id === 'back') {
           return !historyState.getStack().length > 0 ? router('/') : router(historyState.getState());
         }
-
-        // if (element.id === 'menu') {
-        //   console.log(element);
-        //   element.querySelector('#dropdown-menu').classList.toggle('hidden');
-        //   return null;
-        // }
 
         if (element.id === '/logout') {
           const userLoginSession = JSON.parse(localStorage.getItem('userLoginSession'));

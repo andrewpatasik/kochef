@@ -8,7 +8,7 @@ const main = () => {
   if (!isLoggedIn) {
     router('/login');
   } else {
-    router('/');
+    router(window.location.pathname);
   }
 };
 
