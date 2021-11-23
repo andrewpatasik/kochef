@@ -20,8 +20,15 @@ class Create extends HTMLElement {
             <input class="bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 my-2 p-1 text-sm text-gray-800 my-2 p-1" type="text"/>
           </div>
           <section id="ingredient-container">
-          <label for="" class="text-sm text-green-800">Bahan baku</label>
-            <div id="ingredient-component" class="flex flex-col mt-1">
+          <div class="flex justify-between border-b-2 pb-1 mb-4">
+            <label for="" class="text-sm text-green-800">Bahan baku</label>
+            <button id="ingredient-counter" class="flex items-center text-sm text-blue-500 w-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+            </svg>
+            </button>
+          </div>
+            <div id="ingredient-component" class="flex flex-col mb-2">
               <div class="flex items-center gap-1">
                 <input id="ingredient-count" type="text" class="flex-initial w-1/5 bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-sm text-gray-800 p-1"/>
                 <select id="ingredient-metric" class="flex-initial w-2/6 bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-xs text-gray-800 p-1">
@@ -32,16 +39,31 @@ class Create extends HTMLElement {
                 </select>
                 <input id="ingredient-material" type="text" class="flex-1 w-auto bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-sm text-gray-800 p-1"/>
                 <div id="ingredient-action-container" class="text-red-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                  </svg> 
                 </div>
               </div>
             </div>
+            <div id="ingredient-component" class="flex flex-col mb-2">
+              <div class="flex items-center gap-1">
+                <input id="ingredient-count" type="text" class="flex-initial w-1/5 bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-sm text-gray-800 p-1"/>
+                <select id="ingredient-metric" class="flex-initial w-2/6 bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-xs text-gray-800 p-1">
+                  <option>ml</option>
+                  <option>liter</option>
+                  <option>gram</option>
+                  <option>miligram</option>
+                </select>
+                <input id="ingredient-material" type="text" class="flex-1 w-auto bg-white border-2 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-200 focus:border-green-200 text-sm text-gray-800 p-1"/>
+                <div id="ingredient-action-container" class="text-red-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                  </svg> 
+                </div>
+              </div>
+            </div>
+ 
           </section>
-          <div class="relative flex justify-center my-6">
-            <button id="ingredient-counter" class="bg-blue-500 text-sm text-gray-100 p-2 w-auto rounded-md">Tambah Bahan</button>
-          </div>         
         </form>
      </section> 
     `;
