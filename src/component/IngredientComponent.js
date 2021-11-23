@@ -1,6 +1,10 @@
 class IngredientComponent extends HTMLElement {
   connectedCallback() {
     this.render();
+
+    this.querySelector('#ingredient-action-container').addEventListener('click', () => {
+      this.remove();
+    });
   }
 
   render() {
