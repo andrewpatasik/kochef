@@ -2,8 +2,13 @@
 import router from '../script/router';
 
 class Login extends HTMLElement {
+  constructor() {
+    super();
+
+    document.title = 'Kochef - Login';
+  }
+
   connectedCallback() {
-    console.log('login rendered.');
     this.classList.add('grid');
     this.classList.add('grid-row-6');
     this.classList.add('h-screen');

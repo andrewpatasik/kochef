@@ -6,6 +6,12 @@ import cacheRecipeData from '../data/cachedRecipeData';
 import CreateDOM from '../script/CreateDom';
 
 class Dashboard extends HTMLElement {
+  constructor() {
+    super();
+
+    document.title = 'Kochef - Dashboard';
+  }
+
   // eslint-disable-next-line class-methods-use-this
   async fetchUserRecipes() {
     try {

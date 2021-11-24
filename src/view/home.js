@@ -26,6 +26,8 @@ class Home extends HTMLElement {
         }));
       }
     }
+
+    document.title = 'Kochef - Home';
   }
 
   // eslint-disable-next-line class-methods-use-this
