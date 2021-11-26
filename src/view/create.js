@@ -17,6 +17,19 @@ class Create extends HTMLElement {
       });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  recipeImageSelector(uploaderElement, displayContainer) {
+    const imagePreviewElement = displayContainer;
+    const [file] = uploaderElement.files;
+    if (file) {
+      imagePreviewElement.classList.toggle('hidden');
+      imagePreviewElement.src = URL.createObjectURL(file);
+    } else {
+      imagePreviewElement.src = '#';
+      imagePreviewElement.classList.toggle('hidden');
+    }
+  }
+
   disconnectedCallback() {
     this.querySelector('#ingredient-list-counter')
       .removeEventListener('click', (e) => this.addNewIngredientElement(e));
@@ -31,6 +44,10 @@ class Create extends HTMLElement {
 
     this.querySelector('#ingredient-list-counter')
       .addEventListener('click', (e) => this.addNewIngredientElement(e));
+
+    this.querySelector('#recipe-image-uploader')
+      .addEventListener('change', () => this.recipeImageSelector(this.querySelector('#recipe-image-uploader'),
+        this.querySelector('#recipe-image-preview')));
   }
 
   render() {
@@ -43,6 +60,15 @@ class Create extends HTMLElement {
             <label for="" class="text-sm text-green-800">Nama resep</label>
             <input class="bg-white border-b-2 border-gray-200 focus:outline-none focus:border-green-200 my-1 p-1 text-sm text-gray-800 p-1" type="text" placeholder="tuliskan nama resep disini..."/>
           </div>
+          <div class="flex pb-1 mb-2">
+            <label for="" class="text-sm text-green-800">Foto Masakan</div>
+          </div>
+          <section id="recipe-image-container" class="w-full flex flex-col mb-2">
+            <div class="flex flex-col flex-1 border-2 p-1">
+              <input type="file" id="recipe-image-uploader" name="recipe-image" accept="image/png, image/jpeg, image/webp" class="text-sm">
+              <img id="recipe-image-preview" src="#" alt="recipe-image-preview" class="text-sm hidden"/>
+            </div>
+          </section>
           <div class="flex justify-between pb-1 mb-2">
             <label for="" class="text-sm text-green-800">Bahan baku</label>
             <button id="ingredient-list-counter" class="flex items-center text-sm text-blue-500 w-auto">
