@@ -1,5 +1,6 @@
 import '../component/NavbarComponent';
 import '../component/EditorComponent';
+import Quill from 'quill';
 
 class Create extends HTMLElement {
   constructor() {
@@ -49,16 +50,41 @@ class Create extends HTMLElement {
       .addEventListener('change', () => this.recipeImageSelector(this.querySelector('#recipe-image-uploader'),
         this.querySelector('#recipe-image-preview')));
 
+    const options = {
+      modules: {
+        toolbar: [
+          // eslint-disable-next-line quote-props
+          [{ 'header': [2, 3, false] }],
+          ['bold', 'italic'],
+        ],
+      },
+      placeholder: 'Tuliskan langkah-langkah resep disini...',
+      theme: 'snow',
+    };
+    // eslint-disable-next-line no-unused-vars
+    const quill = new Quill('#editor', options);
+
     this.querySelector('#submit-btn').addEventListener('click', (e) => {
       e.preventDefault();
       // select all form inputs
       const recipeTitle = this.querySelector('#recipe-name').value;
+      const recipeId = recipeTitle.split(' ');
       const [file] = this.querySelector('#recipe-image-uploader').files;
-      const imgBlob = URL.createObjectURL(file);
+      const imgBlob = file ? URL.createObjectURL(file) : null;
       const ingredientContainer = this.querySelector('#ingredient-container');
       const ingredientElements = ingredientContainer.querySelectorAll('#ingredient-material');
-      const ingredientArray = ingredientElements.map((ingredient) => ingredient.value);
+      // eslint-disable-next-line max-len
+      const ingredientArray = Array.from(ingredientElements).map((ingredient) => ingredient.value);
+      const recipeInstruction = quill.getContents();
       // store data into object
+      const recipeObject = {
+        key: recipeId.join('-'),
+        title: recipeTitle,
+        thumb: imgBlob,
+        ingredients: ingredientArray,
+        instruction: recipeInstruction.ops[0].insert,
+      };
+      console.log(recipeObject);
       // submit to local storage
       console.log('recipe submitted');
     });
