@@ -48,6 +48,20 @@ class Create extends HTMLElement {
     this.querySelector('#recipe-image-uploader')
       .addEventListener('change', () => this.recipeImageSelector(this.querySelector('#recipe-image-uploader'),
         this.querySelector('#recipe-image-preview')));
+
+    this.querySelector('#submit-btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      // select all form inputs
+      const recipeTitle = this.querySelector('#recipe-name').value;
+      const [file] = this.querySelector('#recipe-image-uploader').files;
+      const imgBlob = URL.createObjectURL(file);
+      const ingredientContainer = this.querySelector('#ingredient-container');
+      const ingredientElements = ingredientContainer.querySelectorAll('#ingredient-material');
+      const ingredientArray = ingredientElements.map((ingredient) => ingredient.value);
+      // store data into object
+      // submit to local storage
+      console.log('recipe submitted');
+    });
   }
 
   render() {
@@ -58,7 +72,7 @@ class Create extends HTMLElement {
         <form class="flex flex-col flex-1 h-full border-sm border-gray-400 mt-2">
           <div class="flex flex-col mb-2">
             <label for="" class="text-sm text-green-800">Nama resep</label>
-            <input class="bg-white border-b-2 border-gray-200 focus:outline-none focus:border-green-200 my-1 p-1 text-sm text-gray-800 p-1" type="text" placeholder="tuliskan nama resep disini..."/>
+            <input id="recipe-name" class="bg-white border-b-2 border-gray-200 focus:outline-none focus:border-green-200 my-1 p-1 text-sm text-gray-800 p-1" type="text" placeholder="tuliskan nama resep disini..."/>
           </div>
           <div class="flex pb-1 mb-2">
             <label for="" class="text-sm text-green-800">Foto Masakan</div>
@@ -77,14 +91,17 @@ class Create extends HTMLElement {
               </svg>
             </button>
           </div>
-          <section id="ingredient-container" class="w-full h-40 border-b-2 mb-2 overflow-auto no-scrollbar">
+          <section id="ingredient-container" class="w-full h-32 border-b-2 mb-2 overflow-auto no-scrollbar">
           </section>
           <div class="flex justify-between pb-1 mb-2">
-            <label for="" class="text-sm text-green-800">Instruksi</label>
+            <label for="" class="text-sm text-green-800">Instruksi Memasak</label>
           </div>
           <section id="step-container" class="flex flex-col flex-1">
             <editor-element></editor-element> 
           </section>
+          <div class="flex justify-end pt-2">
+            <button id="submit-btn" class="bg-blue-500 p-2 w-auto h-auto rounded-md text-sm text-white">Simpan</button>
+          </div>
         </form>
      </section>
     `;
