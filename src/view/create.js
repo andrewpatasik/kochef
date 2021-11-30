@@ -1,6 +1,7 @@
 import '../component/NavbarComponent';
 import '../component/EditorComponent';
 import Quill from 'quill';
+import cacheRecipeData from '../data/cachedRecipeData';
 
 class Create extends HTMLElement {
   constructor() {
@@ -68,7 +69,7 @@ class Create extends HTMLElement {
       e.preventDefault();
       // select all form inputs
       const recipeTitle = this.querySelector('#recipe-name').value;
-      const recipeId = recipeTitle.split(' ');
+      const recipeId = recipeTitle.toLowerCase().split(' ');
       const [file] = this.querySelector('#recipe-image-uploader').files;
       const imgBlob = file ? URL.createObjectURL(file) : null;
       const ingredientContainer = this.querySelector('#ingredient-container');
@@ -86,6 +87,11 @@ class Create extends HTMLElement {
       };
       console.log(recipeObject);
       // submit to local storage
+      cacheRecipeData(recipeObject, {
+        storageName: 'userCache',
+        category: 'created',
+      });
+
       console.log('recipe submitted');
     });
   }
